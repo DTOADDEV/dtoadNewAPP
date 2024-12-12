@@ -1,7 +1,41 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      console.log("Auth state changed in Hero:", session ? "logged in" : "logged out");
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleCreateTask = () => {
+    if (session) {
+      navigate("/create-task");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleExploreTasks = () => {
+    navigate("/tasks");
+  };
+
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background with softer gradient overlay */}
@@ -34,6 +68,7 @@ export const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
           <Button
             size="lg"
+            onClick={handleCreateTask}
             className="bg-dtoad-primary/95 hover:bg-dtoad-primary text-white text-lg px-12 py-6 h-auto backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/30 transition-all duration-300 rounded-xl"
           >
             Create Task
@@ -42,6 +77,7 @@ export const Hero = () => {
           <Button
             size="lg"
             variant="outline"
+            onClick={handleExploreTasks}
             className="border-2 border-dtoad-primary/30 text-[#222222] hover:bg-dtoad-primary/10 text-lg px-12 py-6 h-auto backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/30 transition-all duration-300 rounded-xl bg-white/40"
           >
             Explore Tasks
