@@ -23,6 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Session } from "@supabase/supabase-js";
 import { PlusCircle, MinusCircle, Upload, Coins, Wallet } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { SocialMediaLinks, SocialLink } from "@/components/tasks/SocialMediaLinks";
 
 interface TaskForm {
   title: string;
@@ -33,6 +34,7 @@ interface TaskForm {
   rewardAmount: number;
   image?: File;
   transactionHash?: string;
+  socialLinks: SocialLink[];
 }
 
 const PLATFORM_WALLET = "0x1234567890abcdef"; // Replace with actual platform wallet address
@@ -46,7 +48,8 @@ const CreateTask = () => {
     isHot: false,
     category: "",
     rewardType: "dtoad_tokens",
-    rewardAmount: 0
+    rewardAmount: 0,
+    socialLinks: []
   }]);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -121,7 +124,8 @@ const CreateTask = () => {
       isHot: false,
       category: "",
       rewardType: "dtoad_tokens",
-      rewardAmount: 0
+      rewardAmount: 0,
+      socialLinks: []
     }]);
   };
 
@@ -156,6 +160,7 @@ const CreateTask = () => {
           reward_type: task.rewardType,
           transaction_hash: task.transactionHash,
           image_url: imageUrl,
+          social_links: task.socialLinks,
           approval_status: "pending"
         });
 
@@ -355,6 +360,11 @@ const CreateTask = () => {
                   />
                   <Label htmlFor={`hot-${index}`}>Hot Task (50 USDT)</Label>
                 </div>
+
+                <SocialMediaLinks
+                  links={task.socialLinks}
+                  onChange={(links) => handleTaskChange(index, "socialLinks", links)}
+                />
               </AccordionContent>
             </AccordionItem>
           ))}
