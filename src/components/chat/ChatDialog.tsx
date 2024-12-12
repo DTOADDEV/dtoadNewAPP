@@ -65,10 +65,15 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] h-[600px] flex flex-col gap-4">
-        <div className="flex items-center gap-2 pb-2 border-b">
-          <Bot className="h-6 w-6 text-dtoad-primary" />
-          <h2 className="text-xl font-semibold">DToad Assistant</h2>
+      <DialogContent className="sm:max-w-[500px] h-[600px] flex flex-col gap-4 bg-gradient-to-br from-dtoad-background-light to-dtoad-background border-dtoad-primary/20">
+        <div className="flex items-center gap-3 pb-3 border-b border-dtoad-primary/20">
+          <div className="p-2 rounded-full bg-dtoad-primary/10">
+            <Bot className="h-6 w-6 text-dtoad-primary" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-dtoad-text">DToad Assistant</h2>
+            <p className="text-sm text-dtoad-text-secondary">Powered by AI</p>
+          </div>
         </div>
 
         <ScrollArea className="flex-1 pr-4">
@@ -76,22 +81,26 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex gap-2 ${
+                className={`flex gap-3 ${
                   message.role === 'assistant' ? 'flex-row' : 'flex-row-reverse'
-                }`}
+                } animate-fade-in-up`}
               >
                 <div className="flex-shrink-0">
                   {message.role === 'assistant' ? (
-                    <Bot className="h-8 w-8 text-dtoad-primary" />
+                    <div className="p-2 rounded-full bg-dtoad-primary/10">
+                      <Bot className="h-6 w-6 text-dtoad-primary" />
+                    </div>
                   ) : (
-                    <User className="h-8 w-8 text-dtoad-secondary" />
+                    <div className="p-2 rounded-full bg-dtoad-secondary/10">
+                      <User className="h-6 w-6 text-dtoad-secondary" />
+                    </div>
                   )}
                 </div>
                 <div
-                  className={`rounded-lg p-3 max-w-[80%] ${
+                  className={`rounded-2xl p-4 max-w-[80%] shadow-sm ${
                     message.role === 'assistant'
-                      ? 'bg-dtoad-background-light'
-                      : 'bg-dtoad-primary text-white ml-auto'
+                      ? 'bg-dtoad-background-light/50 border border-dtoad-primary/10'
+                      : 'bg-gradient-to-br from-dtoad-primary to-dtoad-secondary text-white'
                   }`}
                 >
                   {message.content}
@@ -101,18 +110,18 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
           </div>
         </ScrollArea>
 
-        <div className="flex gap-2">
+        <div className="flex gap-3 p-2 bg-dtoad-background-light/50 rounded-lg border border-dtoad-primary/20">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className="resize-none"
+            className="resize-none bg-transparent border-none focus-visible:ring-0 placeholder:text-dtoad-text-secondary/50"
           />
           <Button
             onClick={sendMessage}
             disabled={isLoading || !input.trim()}
-            className="flex-shrink-0"
+            className="flex-shrink-0 bg-gradient-to-br from-dtoad-primary to-dtoad-secondary hover:from-dtoad-primary/90 hover:to-dtoad-secondary/90"
           >
             <Send className="h-4 w-4" />
           </Button>
