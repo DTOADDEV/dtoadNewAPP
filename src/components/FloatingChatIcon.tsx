@@ -8,16 +8,16 @@ export function FloatingChatIcon() {
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 flex items-center gap-3 animate-fade-in-up">
-        <span className="bg-dtoad-background-light/90 backdrop-blur-sm px-4 py-2.5 rounded-full shadow-lg text-dtoad-text font-medium border border-dtoad-primary/20">
+      <div className="fixed bottom-6 right-6 flex items-center gap-4 animate-fade-in-up">
+        <span className="glass-effect px-5 py-3 rounded-full shadow-lg text-dtoad-text font-medium">
           Ask me anything
         </span>
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-14 h-14 bg-gradient-to-br from-dtoad-primary to-dtoad-secondary hover:from-dtoad-primary/90 hover:to-dtoad-secondary/90 shadow-lg transition-all duration-300 hover:scale-105"
+          className="rounded-full w-16 h-16 bg-gradient-to-br from-dtoad-primary via-dtoad-primary/90 to-dtoad-secondary hover:from-dtoad-primary/90 hover:via-dtoad-primary/80 hover:to-dtoad-secondary/90 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-dtoad-primary/20 hover:shadow-2xl border border-dtoad-primary/20"
           size="icon"
         >
-          <Bot className="h-6 w-6 text-white" />
+          <Bot className="h-7 w-7 text-white" />
         </Button>
       </div>
       <ChatDialog open={isOpen} onOpenChange={setIsOpen} />
