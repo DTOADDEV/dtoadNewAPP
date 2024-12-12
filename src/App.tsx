@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Tasks from "./pages/Tasks";
 import CreateTask from "./pages/CreateTask";
+import Dashboard from "./pages/Dashboard";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -30,7 +31,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/create-task" element={<CreateTask />} />
-            {/* Redirect /explore-tasks to /tasks */}
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/explore-tasks" element={<Navigate to="/tasks" replace />} />
           </Routes>
           <Toaster />
