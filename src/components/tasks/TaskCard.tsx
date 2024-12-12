@@ -4,6 +4,7 @@ import { Calendar, Users, ChevronRight } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ShareButton } from "./ShareButton";
 import { supabase } from "@/integrations/supabase/client";
+import { formatTokenAmount } from "@/lib/utils";
 
 interface Task {
   id: string;
@@ -68,7 +69,7 @@ export function TaskCard({ task }: TaskCardProps) {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <div className="text-right">
-          <p className="text-lg font-bold text-dtoad-primary">{task.reward} DTD</p>
+          <p className="text-lg font-bold text-dtoad-primary">{formatTokenAmount(task.reward)}</p>
         </div>
         <Button 
           className="bg-dtoad-primary hover:bg-dtoad-primary/90 group-hover:translate-x-1 transition-all flex items-center gap-2"

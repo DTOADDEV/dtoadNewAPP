@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Users, Video, ChevronRight, Calendar } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { formatTokenAmount } from "@/lib/utils";
 
 interface Task {
   id: string;
@@ -37,6 +38,8 @@ export function TaskClusterCard({ cluster, onClick }: TaskClusterCardProps) {
     return earliest ? (taskDate < earliest ? taskDate : earliest) : taskDate;
   }, null as Date | null);
 
+  const averageReward = Math.floor(cluster.totalReward / cluster.tasks.length);
+
   return (
     <Card 
       className="h-full bg-dtoad-background/50 border-dtoad-primary/20 cursor-pointer hover:border-dtoad-primary/40 transition-all hover:shadow-md group"
@@ -70,10 +73,10 @@ export function TaskClusterCard({ cluster, onClick }: TaskClusterCardProps) {
           </div>
           <div className="flex justify-between items-center">
             <div className="text-sm text-dtoad-text/60">
-              Average reward: {(cluster.totalReward / cluster.tasks.length).toFixed(0)} DTD
+              Average reward: {formatTokenAmount(averageReward)}
             </div>
             <div className="font-semibold text-dtoad-primary">
-              Total: {cluster.totalReward} DTD
+              Total: {formatTokenAmount(cluster.totalReward)}
             </div>
           </div>
         </div>
