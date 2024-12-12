@@ -64,14 +64,14 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
       if (!session?.user) return;
 
       // First try to get existing settings
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from("user_settings")
         .select("*")
         .eq("id", session.user.id)
         .single();
 
-      if (error && error.code === "PGRST116") {
-        // Settings don't exist, create them
+      // If no settings exist or there's an error, create default settings
+      if (!data || (error && error.code === "PGRST116")) {
         const { data: newSettings, error: insertError } = await supabase
           .from("user_settings")
           .insert([
@@ -87,20 +87,18 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
           .select()
           .single();
 
-        if (insertError) throw insertError;
-        
-        if (newSettings) {
-          setSettings({
-            theme: newSettings.theme_preference,
-            fontSize: newSettings.font_size,
-            email_notifications: newSettings.email_notifications as Settings['email_notifications'],
-            push_notifications: newSettings.push_notifications as Settings['push_notifications'],
-            privacy_settings: newSettings.privacy_settings as Settings['privacy_settings'],
-          });
+        if (insertError) {
+          console.error("Error creating settings:", insertError);
+          throw insertError;
         }
+        
+        data = newSettings;
       } else if (error) {
+        console.error("Error fetching settings:", error);
         throw error;
-      } else if (data) {
+      }
+
+      if (data) {
         setSettings({
           theme: data.theme_preference,
           fontSize: data.font_size,
