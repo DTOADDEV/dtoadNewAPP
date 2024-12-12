@@ -151,6 +151,12 @@ const CreateTask = () => {
           imageUrl = await handleImageUpload(task.image, tasks.indexOf(task));
         }
 
+        // Convert social links to a format compatible with Supabase's Json type
+        const socialLinksJson = task.socialLinks.map(link => ({
+          platform: link.platform,
+          url: link.url
+        }));
+
         const { error } = await supabase.from("tasks").insert({
           title: task.title,
           description: task.description,
@@ -160,8 +166,9 @@ const CreateTask = () => {
           reward_type: task.rewardType,
           transaction_hash: task.transactionHash,
           image_url: imageUrl,
-          social_links: task.socialLinks,
-          approval_status: "pending"
+          social_links: socialLinksJson,
+          category_id: task.category,
+          payment_status: "pending"
         });
 
         if (error) throw error;

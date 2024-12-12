@@ -12,6 +12,7 @@ import {
 import { PlusCircle, MinusCircle } from "lucide-react";
 
 export interface SocialLink {
+  [key: string]: string; // This makes it compatible with Json type
   platform: string;
   url: string;
 }
