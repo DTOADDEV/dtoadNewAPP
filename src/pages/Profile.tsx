@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { Wallet2, Users, Trophy, Coins, Upload } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { ProfileHeader } from "@/components/profile/ProfileHeader";
+import { MetricsCards } from "@/components/profile/MetricsCards";
+import { ProfileContent } from "@/components/profile/ProfileContent";
+import { SettingsContent } from "@/components/profile/SettingsContent";
 
 interface Profile {
   id: string;
@@ -223,166 +222,68 @@ export default function Profile() {
     }
   }
 
+  if (!profile) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8 text-center">
-          <div className="relative inline-block">
-            <Avatar className="w-32 h-32">
-              <AvatarImage
-                src={profile?.avatar_url ? `${supabase.storage.from("avatars").getPublicUrl(profile.avatar_url).data.publicUrl}` : undefined}
-                alt="Profile"
-              />
-              <AvatarFallback>{profile?.username?.charAt(0) || "?"}</AvatarFallback>
-            </Avatar>
-            <label
-              className="absolute bottom-0 right-0 bg-dtoad-primary hover:bg-dtoad-primary/90 text-white p-2 rounded-full cursor-pointer"
-              htmlFor="avatar-upload"
-            >
-              <Upload className="w-4 h-4" />
-            </label>
-            <input
-              type="file"
-              id="avatar-upload"
-              className="hidden"
-              accept="image/*"
-              onChange={uploadAvatar}
-              disabled={isUploading}
-            />
+    <div className="container mx-auto px-4 py-8 min-h-screen bg-gradient-to-b from-white to-dtoad-primary/5">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="bg-white rounded-lg shadow-xl overflow-hidden">
+          <ProfileHeader
+            username={profile.username}
+            avatarUrl={profile.avatar_url}
+            isUploading={isUploading}
+            onAvatarChange={uploadAvatar}
+          />
+          <div className="pt-20 pb-6 px-6">
+            <h2 className="text-2xl font-bold text-center text-gray-800">
+              {profile.username || "Anonymous"}
+            </h2>
           </div>
-          <h2 className="mt-4 text-2xl font-bold text-dtoad-text">
-            {profile?.username || "Anonymous"}
-          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tokens Held</CardTitle>
-              <Coins className="h-4 w-4 text-dtoad-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{profile?.tokens_held || 0}</div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tasks Completed</CardTitle>
-              <Trophy className="h-4 w-4 text-dtoad-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{profile?.tasks_completed || 0}</div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Referrals</CardTitle>
-              <Users className="h-4 w-4 text-dtoad-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{profile?.referrals_count || 0}</div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Rank</CardTitle>
-              <Trophy className="h-4 w-4 text-dtoad-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">#{profile?.leaderboard_rank || "N/A"}</div>
-            </CardContent>
-          </Card>
-        </div>
+        <MetricsCards
+          tokensHeld={profile.tokens_held}
+          tasksCompleted={profile.tasks_completed}
+          referralsCount={profile.referrals_count}
+          leaderboardRank={profile.leaderboard_rank}
+        />
 
         <Tabs defaultValue="profile" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsList className="w-full grid grid-cols-2 gap-4 bg-transparent">
+            <TabsTrigger
+              value="profile"
+              className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+            >
+              Profile
+            </TabsTrigger>
+            <TabsTrigger
+              value="settings"
+              className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+            >
+              Settings
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="profile" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Bio</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {isEditing ? (
-                  <div className="space-y-2">
-                    <Input
-                      value={editedBio}
-                      onChange={(e) => setEditedBio(e.target.value)}
-                      placeholder="Write something about yourself..."
-                    />
-                    <div className="flex space-x-2">
-                      <Button onClick={updateBio}>Save</Button>
-                      <Button variant="outline" onClick={() => setIsEditing(false)}>
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <p>{profile?.bio || "No bio yet"}</p>
-                    <Button variant="outline" onClick={() => setIsEditing(true)}>
-                      Edit Bio
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-500">No recent activity</p>
-              </CardContent>
-            </Card>
+          <TabsContent value="profile" className="space-y-4 animate-fade-in-up">
+            <ProfileContent
+              bio={profile.bio}
+              isEditing={isEditing}
+              editedBio={editedBio}
+              onBioChange={setEditedBio}
+              onSaveBio={updateBio}
+              onEditToggle={() => setIsEditing(!isEditing)}
+            />
           </TabsContent>
 
-          <TabsContent value="settings" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Wallet Connection</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {profile?.wallet_address ? (
-                  <div className="flex items-center space-x-2">
-                    <Wallet2 className="h-4 w-4 text-dtoad-primary" />
-                    <span className="font-mono">
-                      {`${profile.wallet_address.slice(0, 6)}...${profile.wallet_address.slice(-4)}`}
-                    </span>
-                  </div>
-                ) : (
-                  <Button onClick={connectWallet}>
-                    <Wallet2 className="mr-2 h-4 w-4" /> Connect Wallet
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Referral Code</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {profile?.referral_code ? (
-                  <div className="flex items-center space-x-2">
-                    <code className="bg-dtoad-background/50 px-2 py-1 rounded">
-                      {profile.referral_code}
-                    </code>
-                  </div>
-                ) : (
-                  <Button onClick={generateReferralCode}>
-                    Generate Referral Code
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
+          <TabsContent value="settings">
+            <SettingsContent
+              walletAddress={profile.wallet_address}
+              referralCode={profile.referral_code}
+              onConnectWallet={connectWallet}
+              onGenerateReferralCode={generateReferralCode}
+            />
           </TabsContent>
         </Tabs>
       </div>
