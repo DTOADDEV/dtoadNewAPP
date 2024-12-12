@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
@@ -66,13 +66,23 @@ export const Navbar = () => {
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               {session ? (
-                <Button 
-                  onClick={handleLogout}
-                  variant="outline" 
-                  className="text-dtoad-text hover:text-dtoad-primary font-semibold"
-                >
-                  Logout
-                </Button>
+                <>
+                  <Button 
+                    onClick={() => navigate("/create-task")}
+                    variant="outline" 
+                    className="mr-3 font-semibold flex items-center gap-2"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Create Task
+                  </Button>
+                  <Button 
+                    onClick={handleLogout}
+                    variant="outline" 
+                    className="text-dtoad-text hover:text-dtoad-primary font-semibold"
+                  >
+                    Logout
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button 
@@ -114,6 +124,9 @@ export const Navbar = () => {
             <MobileNavLink href="/tasks">Tasks</MobileNavLink>
             <MobileNavLink href="#news">News</MobileNavLink>
             <MobileNavLink href="#pricing">Pricing</MobileNavLink>
+            {session && (
+              <MobileNavLink href="/create-task">Create Task</MobileNavLink>
+            )}
           </div>
           <div className="pt-4 pb-3 border-t border-dtoad-primary/20">
             <div className="px-2 space-y-1">

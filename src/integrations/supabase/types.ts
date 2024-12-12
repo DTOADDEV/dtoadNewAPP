@@ -179,6 +179,41 @@ export type Database = {
         }
         Relationships: []
       }
+      task_payments: {
+        Row: {
+          amount_paid: number
+          created_at: string
+          id: string
+          payment_status: string
+          task_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_paid?: number
+          created_at?: string
+          id?: string
+          payment_status?: string
+          task_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number
+          created_at?: string
+          id?: string
+          payment_status?: string
+          task_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_payments_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           category_id: string | null
@@ -189,7 +224,9 @@ export type Database = {
           image_url: string | null
           is_hot: boolean | null
           participant_count: number | null
+          payment_status: string
           reward: number
+          task_type: string
           title: string
           updated_at: string
         }
@@ -202,7 +239,9 @@ export type Database = {
           image_url?: string | null
           is_hot?: boolean | null
           participant_count?: number | null
+          payment_status?: string
           reward?: number
+          task_type?: string
           title: string
           updated_at?: string
         }
@@ -215,7 +254,9 @@ export type Database = {
           image_url?: string | null
           is_hot?: boolean | null
           participant_count?: number | null
+          payment_status?: string
           reward?: number
+          task_type?: string
           title?: string
           updated_at?: string
         }
