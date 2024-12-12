@@ -4,19 +4,18 @@ import { ArrowRight } from "lucide-react";
 export const Hero = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Gradient Background with Glass Effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-dtoad-secondary/20 via-dtoad-background/50 to-dtoad-background animate-gradient-y backdrop-blur-sm" />
-      
-      {/* Decorative Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-dtoad-primary/10 via-transparent to-transparent" />
-        <div className="absolute top-20 left-1/4 w-72 h-72 bg-dtoad-primary/20 rounded-full filter blur-3xl" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-dtoad-accent/10 rounded-full filter blur-3xl" />
+      {/* Background with gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-dtoad-background via-dtoad-background/90 to-dtoad-background">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-dtoad-primary/5 via-transparent to-transparent" />
       </div>
       
+      {/* Glowing orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-dtoad-primary/10 rounded-full filter blur-[128px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-dtoad-accent/5 rounded-full filter blur-[128px]" />
+      
       {/* Content */}
-      <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 animate-fade-in-up max-w-4xl mx-auto">
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-dtoad-text tracking-tight mb-6 font-sans">
+      <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 animate-fade-in-up max-w-5xl mx-auto">
+        <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-b from-dtoad-text via-dtoad-text/90 to-dtoad-text/80 drop-shadow-lg">
           From{" "}
           <span className="bg-gradient-to-r from-dtoad-primary to-dtoad-accent bg-clip-text text-transparent">
             Memes
@@ -26,29 +25,32 @@ export const Hero = () => {
             Dreams
           </span>
         </h1>
-        <p className="text-xl sm:text-2xl text-dtoad-text-secondary mb-8 leading-relaxed font-light">
-          Join the DToad Revolution! Earn Crypto, Build Community, Have Fun
+        <h2 className="text-3xl sm:text-4xl font-medium text-dtoad-text/90 mb-16 tracking-wide">
+          Join the DToad Revolution!
+        </h2>
+        <p className="text-xl sm:text-2xl text-dtoad-text-secondary mb-12 leading-relaxed font-light max-w-3xl mx-auto">
+          Earn Crypto, Build Community, Have Fun
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
           <Button
             size="lg"
-            className="bg-dtoad-primary hover:bg-dtoad-primary/90 text-lg px-8 backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/20 transition-all duration-300"
+            className="bg-dtoad-primary hover:bg-dtoad-primary/90 text-lg px-12 py-6 h-auto backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/20 transition-all duration-300 rounded-xl"
           >
             Create Task
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-6 w-6" />
           </Button>
           <Button
             size="lg"
             variant="outline"
-            className="border-dtoad-primary text-dtoad-primary hover:bg-dtoad-primary/10 text-lg px-8 backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/20 transition-all duration-300"
+            className="border-2 border-dtoad-primary/20 text-dtoad-primary hover:bg-dtoad-primary/10 text-lg px-12 py-6 h-auto backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/20 transition-all duration-300 rounded-xl bg-dtoad-background/10"
           >
             Explore Tasks
           </Button>
         </div>
       </div>
 
-      {/* Glass Panel Effect */}
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-dtoad-background to-transparent" />
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-dtoad-background to-transparent" />
     </div>
   );
 };
