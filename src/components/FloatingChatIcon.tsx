@@ -9,8 +9,8 @@ export function FloatingChatIcon() {
   return (
     <>
       <div className="fixed bottom-6 right-6 flex items-center gap-4 animate-fade-in-up">
-        <span className="glass-effect px-5 py-3 rounded-full shadow-lg text-dtoad-text font-medium">
-          Ask me anything
+        <span className="glass-effect px-5 py-3 rounded-full shadow-lg text-dtoad-text font-bold text-xl uppercase tracking-wider">
+          AMA
         </span>
         <Button
           onClick={() => setIsOpen(true)}
