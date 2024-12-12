@@ -32,11 +32,21 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
     setIsLoading(true);
 
     try {
+      console.log('Sending message to edge function:', [...messages, newMessage]);
       const { data, error } = await supabase.functions.invoke('realtime-chat', {
         body: { messages: [...messages, newMessage] }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      console.log('Edge function response:', data);
+
+      if (!data?.choices?.[0]?.message?.content) {
+        throw new Error('Invalid response format from chat function');
+      }
 
       const assistantMessage: Message = {
         role: 'assistant',
