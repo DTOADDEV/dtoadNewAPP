@@ -10,6 +10,7 @@ import { Wallet2, Users, Trophy, Coins, Upload } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface Profile {
+  id: string;  // Added this line to fix the TypeScript error
   username: string;
   avatar_url: string;
   bio: string;
