@@ -10,7 +10,7 @@ import { Wallet2, Users, Trophy, Coins, Upload } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface Profile {
-  id: string;  // Added this line to fix the TypeScript error
+  id: string;
   username: string;
   avatar_url: string;
   bio: string;
@@ -47,17 +47,44 @@ export default function Profile() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) return;
 
-      const { data, error } = await supabase
+      // First try to get the existing profile
+      let { data: profile, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", session.user.id)
         .single();
 
-      if (error) throw error;
-      setProfile(data);
-      setEditedBio(data?.bio || "");
+      // If no profile exists, create one
+      if (!profile) {
+        const { data: newProfile, error: insertError } = await supabase
+          .from("profiles")
+          .insert([
+            { 
+              id: session.user.id,
+              username: session.user.email?.split('@')[0] || 'Anonymous',
+              tokens_held: 0,
+              tasks_completed: 0,
+              referrals_count: 0
+            }
+          ])
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+        profile = newProfile;
+      }
+
+      if (error && error.code !== 'PGRST116') throw error;
+      
+      setProfile(profile);
+      setEditedBio(profile?.bio || "");
     } catch (error) {
       console.error("Error fetching profile:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load profile",
+        variant: "destructive",
+      });
     }
   }
 
