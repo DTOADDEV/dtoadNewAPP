@@ -218,6 +218,7 @@ export type Database = {
         Row: {
           category_id: string | null
           created_at: string
+          creator_id: string | null
           deadline: string | null
           description: string
           id: string
@@ -236,6 +237,7 @@ export type Database = {
         Insert: {
           category_id?: string | null
           created_at?: string
+          creator_id?: string | null
           deadline?: string | null
           description: string
           id?: string
@@ -254,6 +256,7 @@ export type Database = {
         Update: {
           category_id?: string | null
           created_at?: string
+          creator_id?: string | null
           deadline?: string | null
           description?: string
           id?: string
@@ -275,6 +278,13 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "task_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
