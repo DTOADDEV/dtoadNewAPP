@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Menu, X, Plus } from "lucide-react";
+import { Menu, X, Plus, DollarSign, ToggleLeft, ToggleRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
@@ -8,6 +8,7 @@ import { Session } from "@supabase/supabase-js";
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
+  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +31,8 @@ export const Navbar = () => {
     navigate("/login");
   };
 
-  const handleLogin = () => {
+  const handleAuthClick = () => {
+    setIsSignUp(!isSignUp);
     navigate("/login");
   };
 
@@ -48,12 +50,15 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span 
+              <div 
                 onClick={handleLogoClick}
-                className="text-2xl font-bold bg-gradient-to-r from-dtoad-primary to-dtoad-accent bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity"
+                className="flex items-center gap-1 cursor-pointer group"
               >
-                DToad
-              </span>
+                <DollarSign className="h-8 w-8 text-dtoad-primary group-hover:text-dtoad-accent transition-colors" />
+                <span className="text-3xl font-extrabold bg-gradient-to-r from-dtoad-primary to-dtoad-accent bg-clip-text text-transparent group-hover:from-dtoad-accent group-hover:to-dtoad-primary transition-all">
+                  DTOAD
+                </span>
+              </div>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
@@ -84,21 +89,22 @@ export const Navbar = () => {
                   </Button>
                 </>
               ) : (
-                <>
-                  <Button 
-                    variant="outline" 
-                    className="mr-3 font-semibold"
-                    onClick={handleLogin}
-                  >
-                    Login
-                  </Button>
-                  <Button 
-                    className="bg-dtoad-primary hover:bg-dtoad-primary/90 font-semibold"
-                    onClick={handleLogin}
-                  >
-                    Sign Up
-                  </Button>
-                </>
+                <Button 
+                  onClick={handleAuthClick}
+                  className="bg-dtoad-primary hover:bg-dtoad-primary/90 font-semibold flex items-center gap-2"
+                >
+                  {isSignUp ? (
+                    <>
+                      Sign Up
+                      <ToggleRight className="h-5 w-5 ml-1" />
+                    </>
+                  ) : (
+                    <>
+                      Login
+                      <ToggleLeft className="h-5 w-5 ml-1" />
+                    </>
+                  )}
+                </Button>
               )}
             </div>
           </div>
@@ -139,21 +145,22 @@ export const Navbar = () => {
                   Logout
                 </Button>
               ) : (
-                <>
-                  <Button
-                    variant="outline"
-                    className="w-full mb-2 text-center justify-center font-semibold"
-                    onClick={handleLogin}
-                  >
-                    Login
-                  </Button>
-                  <Button 
-                    className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center font-semibold"
-                    onClick={handleLogin}
-                  >
-                    Sign Up
-                  </Button>
-                </>
+                <Button 
+                  onClick={handleAuthClick}
+                  className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center font-semibold flex items-center gap-2"
+                >
+                  {isSignUp ? (
+                    <>
+                      Sign Up
+                      <ToggleRight className="h-5 w-5 ml-1" />
+                    </>
+                  ) : (
+                    <>
+                      Login
+                      <ToggleLeft className="h-5 w-5 ml-1" />
+                    </>
+                  )}
+                </Button>
               )}
             </div>
           </div>
