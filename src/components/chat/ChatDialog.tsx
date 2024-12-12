@@ -75,7 +75,10 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] h-[600px] flex flex-col gap-4 bg-gradient-to-br from-dtoad-background-light to-dtoad-background border-dtoad-primary/20 shadow-2xl">
+      <DialogContent 
+        className="fixed bottom-24 right-6 sm:max-w-[400px] h-[500px] flex flex-col gap-4 bg-gradient-to-br from-dtoad-background-light to-dtoad-background border-dtoad-primary/20 shadow-2xl rounded-2xl"
+        style={{ transform: 'none', position: 'fixed' }}
+      >
         <div className="flex items-center gap-4 pb-4 border-b border-dtoad-primary/20">
           <div className="p-2.5 rounded-full bg-gradient-to-br from-dtoad-primary/20 to-dtoad-secondary/20 backdrop-blur-sm">
             <Bot className="h-6 w-6 text-dtoad-primary" />
