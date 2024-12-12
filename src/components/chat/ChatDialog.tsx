@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -76,9 +76,9 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="fixed bottom-24 right-6 sm:max-w-[400px] h-[500px] flex flex-col gap-4 bg-gradient-to-br from-dtoad-background-light to-dtoad-background border-dtoad-primary/20 shadow-2xl rounded-2xl"
-        style={{ transform: 'none', position: 'fixed' }}
+        className="fixed bottom-24 right-6 w-[90vw] sm:w-[400px] h-[600px] max-h-[80vh] flex flex-col gap-4 bg-gradient-to-br from-dtoad-background-light to-dtoad-background border-dtoad-primary/20 shadow-2xl rounded-2xl overflow-hidden"
       >
+        <DialogTitle className="sr-only">Chat with DToad Assistant</DialogTitle>
         <div className="flex items-center gap-4 pb-4 border-b border-dtoad-primary/20">
           <div className="p-2.5 rounded-full bg-gradient-to-br from-dtoad-primary/20 to-dtoad-secondary/20 backdrop-blur-sm">
             <Bot className="h-6 w-6 text-dtoad-primary" />
@@ -126,18 +126,20 @@ export function ChatDialog({ open, onOpenChange }: ChatDialogProps) {
           </div>
         </ScrollArea>
 
-        <div className="flex gap-3 p-3 glass-effect rounded-xl">
+        <div className="flex gap-3 p-3 glass-effect rounded-xl mt-auto">
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             className="resize-none bg-transparent border-none focus-visible:ring-0 placeholder:text-dtoad-text-secondary/50"
+            aria-label="Chat message input"
           />
           <Button
             onClick={sendMessage}
             disabled={isLoading || !input.trim()}
             className="flex-shrink-0 bg-gradient-to-br from-dtoad-primary to-dtoad-secondary hover:from-dtoad-primary/90 hover:to-dtoad-secondary/90 transition-all duration-300 hover:scale-105"
+            aria-label="Send message"
           >
             <Send className="h-4 w-4" />
           </Button>
