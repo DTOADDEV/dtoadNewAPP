@@ -1,9 +1,38 @@
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { Session } from "@supabase/supabase-js";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      console.log("Auth state changed:", session ? "logged in" : "logged out");
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
+
+  const handleLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <nav className="fixed w-full z-50 bg-dtoad-background/80 backdrop-blur-lg border-b border-dtoad-primary/20">
@@ -26,12 +55,31 @@ export const Navbar = () => {
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <Button variant="outline" className="mr-3">
-                Login
-              </Button>
-              <Button className="bg-dtoad-primary hover:bg-dtoad-primary/90">
-                Sign Up
-              </Button>
+              {session ? (
+                <Button 
+                  onClick={handleLogout}
+                  variant="outline" 
+                  className="text-dtoad-text hover:text-dtoad-primary"
+                >
+                  Logout
+                </Button>
+              ) : (
+                <>
+                  <Button 
+                    variant="outline" 
+                    className="mr-3"
+                    onClick={handleLogin}
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    className="bg-dtoad-primary hover:bg-dtoad-primary/90"
+                    onClick={handleLogin}
+                  >
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </div>
           </div>
           <div className="md:hidden">
@@ -60,15 +108,31 @@ export const Navbar = () => {
           </div>
           <div className="pt-4 pb-3 border-t border-dtoad-primary/20">
             <div className="px-2 space-y-1">
-              <Button
-                variant="outline"
-                className="w-full mb-2 text-center justify-center"
-              >
-                Login
-              </Button>
-              <Button className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center">
-                Sign Up
-              </Button>
+              {session ? (
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="w-full text-center justify-center"
+                >
+                  Logout
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    className="w-full mb-2 text-center justify-center"
+                    onClick={handleLogin}
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center"
+                    onClick={handleLogin}
+                  >
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
