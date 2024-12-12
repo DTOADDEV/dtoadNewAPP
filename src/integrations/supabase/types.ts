@@ -226,6 +226,7 @@ export type Database = {
           participant_count: number | null
           payment_status: string
           reward: number
+          reward_type: string
           social_links: Json | null
           task_type: string
           title: string
@@ -243,6 +244,7 @@ export type Database = {
           participant_count?: number | null
           payment_status?: string
           reward?: number
+          reward_type?: string
           social_links?: Json | null
           task_type?: string
           title: string
@@ -260,6 +262,7 @@ export type Database = {
           participant_count?: number | null
           payment_status?: string
           reward?: number
+          reward_type?: string
           social_links?: Json | null
           task_type?: string
           title?: string

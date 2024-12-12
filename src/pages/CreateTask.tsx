@@ -142,9 +142,20 @@ const CreateTask = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session) return;
+    
+    // Validate session and user ID
+    if (!session?.user?.id) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to create tasks.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
+      console.log("Creating tasks with user ID:", session.user.id);
+
       for (const task of tasks) {
         let imageUrl = null;
         if (task.image) {
@@ -168,10 +179,14 @@ const CreateTask = () => {
           image_url: imageUrl,
           social_links: socialLinksJson,
           category_id: task.category,
-          payment_status: "pending"
+          payment_status: "pending",
+          creator_id: session.user.id // Add the creator's ID
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error creating task:", error);
+          throw error;
+        }
       }
 
       toast({
