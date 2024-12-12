@@ -8,8 +8,17 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if user is already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/");
+      }
+    });
+
+    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Auth state changed:", event, session ? "logged in" : "logged out");
         if (session) {
           navigate("/");
         }
@@ -42,6 +51,9 @@ const Login = () => {
               },
             }}
             providers={[]}
+            view="sign_in"
+            showLinks={true}
+            redirectTo={window.location.origin}
           />
         </div>
       </div>
