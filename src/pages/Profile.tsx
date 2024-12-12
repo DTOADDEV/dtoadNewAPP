@@ -243,49 +243,53 @@ export default function Profile() {
           </div>
         </div>
 
-        <MetricsCards
-          tokensHeld={profile.tokens_held}
-          tasksCompleted={profile.tasks_completed}
-          referralsCount={profile.referrals_count}
-          leaderboardRank={profile.leaderboard_rank}
-        />
+        <div className="space-y-8">
+          <ProfileContent
+            bio={profile.bio}
+            isEditing={isEditing}
+            editedBio={editedBio}
+            onBioChange={setEditedBio}
+            onSaveBio={updateBio}
+            onEditToggle={() => setIsEditing(!isEditing)}
+          />
 
-        <Tabs defaultValue="profile" className="space-y-4">
-          <TabsList className="w-full grid grid-cols-2 gap-4 bg-transparent">
-            <TabsTrigger
-              value="profile"
-              className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-            >
-              Profile
-            </TabsTrigger>
-            <TabsTrigger
-              value="settings"
-              className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-            >
-              Settings
-            </TabsTrigger>
-          </TabsList>
+          <MetricsCards
+            tokensHeld={profile.tokens_held}
+            tasksCompleted={profile.tasks_completed}
+            referralsCount={profile.referrals_count}
+            leaderboardRank={profile.leaderboard_rank}
+          />
 
-          <TabsContent value="profile" className="space-y-4 animate-fade-in-up">
-            <ProfileContent
-              bio={profile.bio}
-              isEditing={isEditing}
-              editedBio={editedBio}
-              onBioChange={setEditedBio}
-              onSaveBio={updateBio}
-              onEditToggle={() => setIsEditing(!isEditing)}
-            />
-          </TabsContent>
+          <Tabs defaultValue="profile" className="space-y-4">
+            <TabsList className="w-full grid grid-cols-2 gap-4 bg-transparent">
+              <TabsTrigger
+                value="profile"
+                className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+              >
+                Profile
+              </TabsTrigger>
+              <TabsTrigger
+                value="settings"
+                className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+              >
+                Settings
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="settings">
-            <SettingsContent
-              walletAddress={profile.wallet_address}
-              referralCode={profile.referral_code}
-              onConnectWallet={connectWallet}
-              onGenerateReferralCode={generateReferralCode}
-            />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="profile" className="space-y-4 animate-fade-in-up">
+              {/* Additional profile content can go here */}
+            </TabsContent>
+
+            <TabsContent value="settings">
+              <SettingsContent
+                walletAddress={profile.wallet_address}
+                referralCode={profile.referral_code}
+                onConnectWallet={connectWallet}
+                onGenerateReferralCode={generateReferralCode}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );
