@@ -115,6 +115,82 @@ export type Database = {
           },
         ]
       }
+      user_devices: {
+        Row: {
+          created_at: string
+          device_name: string
+          id: string
+          is_active: boolean | null
+          last_login: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          device_name: string
+          id?: string
+          is_active?: boolean | null
+          last_login?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          device_name?: string
+          id?: string
+          is_active?: boolean | null
+          last_login?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_devices_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          email_notifications: Json | null
+          font_size: string | null
+          id: string
+          privacy_settings: Json | null
+          push_notifications: Json | null
+          theme_preference: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email_notifications?: Json | null
+          font_size?: string | null
+          id: string
+          privacy_settings?: Json | null
+          push_notifications?: Json | null
+          theme_preference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email_notifications?: Json | null
+          font_size?: string | null
+          id?: string
+          privacy_settings?: Json | null
+          push_notifications?: Json | null
+          theme_preference?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_settings_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

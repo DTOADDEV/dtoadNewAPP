@@ -1,61 +1,175 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Wallet2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AccountSettings } from "@/components/settings/AccountSettings";
+import { NotificationSettings } from "@/components/settings/NotificationSettings";
+import { AppearanceSettings } from "@/components/settings/AppearanceSettings";
+import { PrivacySettings } from "@/components/settings/PrivacySettings";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface SettingsContentProps {
   walletAddress?: string;
-  referralCode?: string;
   onConnectWallet: () => void;
-  onGenerateReferralCode: () => void;
 }
 
-export function SettingsContent({
-  walletAddress,
-  referralCode,
-  onConnectWallet,
-  onGenerateReferralCode,
-}: SettingsContentProps) {
-  return (
-    <div className="space-y-4 animate-fade-in-up">
-      <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
-        <CardHeader>
-          <CardTitle>Wallet Connection</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {walletAddress ? (
-            <div className="flex items-center space-x-2 bg-white/50 p-3 rounded-lg">
-              <Wallet2 className="h-4 w-4 text-dtoad-primary" />
-              <span className="font-mono text-sm">
-                {`${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`}
-              </span>
-            </div>
-          ) : (
-            <Button onClick={onConnectWallet} className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90">
-              <Wallet2 className="mr-2 h-4 w-4" /> Connect Wallet
-            </Button>
-          )}
-        </CardContent>
-      </Card>
+export function SettingsContent({ walletAddress, onConnectWallet }: SettingsContentProps) {
+  const { toast } = useToast();
+  const [settings, setSettings] = useState({
+    theme: "light",
+    fontSize: "medium",
+    email_notifications: {
+      account_updates: true,
+      task_updates: true,
+      platform_news: true,
+    },
+    push_notifications: {
+      new_tasks: true,
+      platform_updates: true,
+    },
+    privacy_settings: {
+      show_profile: true,
+      show_stats: true,
+      show_leaderboard: true,
+    },
+  });
 
-      <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
-        <CardHeader>
-          <CardTitle>Referral Code</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {referralCode ? (
-            <div className="bg-white/50 p-3 rounded-lg">
-              <code className="font-mono text-sm">{referralCode}</code>
-            </div>
-          ) : (
-            <Button
-              onClick={onGenerateReferralCode}
-              className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90"
-            >
-              Generate Referral Code
-            </Button>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+
+      const { data, error } = await supabase
+        .from("user_settings")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        setSettings({
+          theme: data.theme_preference,
+          fontSize: data.font_size,
+          email_notifications: data.email_notifications,
+          push_notifications: data.push_notifications,
+          privacy_settings: data.privacy_settings,
+        });
+      }
+    } catch (error) {
+      console.error("Error loading settings:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load settings",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const updateSettings = async (newSettings: Partial<typeof settings>) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+
+      const { error } = await supabase
+        .from("user_settings")
+        .upsert({
+          id: session.user.id,
+          theme_preference: newSettings.theme ?? settings.theme,
+          font_size: newSettings.fontSize ?? settings.fontSize,
+          email_notifications: newSettings.email_notifications ?? settings.email_notifications,
+          push_notifications: newSettings.push_notifications ?? settings.push_notifications,
+          privacy_settings: newSettings.privacy_settings ?? settings.privacy_settings,
+        });
+
+      if (error) throw error;
+
+      setSettings((prev) => ({ ...prev, ...newSettings }));
+      toast({
+        title: "Success",
+        description: "Settings updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating settings:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update settings",
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <Tabs defaultValue="account" className="w-full animate-fade-in-up">
+      <TabsList className="grid grid-cols-4 gap-4 bg-transparent">
+        <TabsTrigger
+          value="account"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+        >
+          Account
+        </TabsTrigger>
+        <TabsTrigger
+          value="notifications"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+        >
+          Notifications
+        </TabsTrigger>
+        <TabsTrigger
+          value="appearance"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+        >
+          Appearance
+        </TabsTrigger>
+        <TabsTrigger
+          value="privacy"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+        >
+          Privacy
+        </TabsTrigger>
+      </TabsList>
+
+      <div className="mt-6">
+        <TabsContent value="account" className="space-y-4">
+          <AccountSettings
+            walletAddress={walletAddress}
+            onConnectWallet={onConnectWallet}
+            onUpdateProfile={() => {}}
+          />
+        </TabsContent>
+
+        <TabsContent value="notifications">
+          <NotificationSettings
+            settings={{
+              email: settings.email_notifications,
+              push: settings.push_notifications,
+            }}
+            onUpdateSettings={(newSettings) => {
+              updateSettings({
+                email_notifications: newSettings.email,
+                push_notifications: newSettings.push,
+              });
+            }}
+          />
+        </TabsContent>
+
+        <TabsContent value="appearance">
+          <AppearanceSettings
+            theme={settings.theme}
+            fontSize={settings.fontSize}
+            onUpdateTheme={(theme) => updateSettings({ theme })}
+            onUpdateFontSize={(fontSize) => updateSettings({ fontSize })}
+          />
+        </TabsContent>
+
+        <TabsContent value="privacy">
+          <PrivacySettings
+            settings={settings.privacy_settings}
+            onUpdateSettings={(privacy_settings) => updateSettings({ privacy_settings })}
+          />
+        </TabsContent>
+      </div>
+    </Tabs>
   );
 }
