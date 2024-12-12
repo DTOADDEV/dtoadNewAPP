@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -28,6 +28,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/tasks" element={<Tasks />} />
+            {/* Redirect /explore-tasks to /tasks */}
+            <Route path="/explore-tasks" element={<Navigate to="/tasks" replace />} />
           </Routes>
           <Toaster />
         </div>

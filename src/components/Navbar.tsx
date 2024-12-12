@@ -34,19 +34,29 @@ export const Navbar = () => {
     navigate("/login");
   };
 
+  const handleLogoClick = () => {
+    if (session) {
+      navigate("/tasks");
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <nav className="fixed w-full z-50 bg-dtoad-background/80 backdrop-blur-lg border-b border-dtoad-primary/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold bg-gradient-to-r from-dtoad-primary to-dtoad-accent bg-clip-text text-transparent">
+              <span 
+                onClick={handleLogoClick}
+                className="text-2xl font-bold bg-gradient-to-r from-dtoad-primary to-dtoad-accent bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity"
+              >
                 DToad
               </span>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <NavLink href="#features">Features</NavLink>
                 <NavLink href="/tasks">Tasks</NavLink>
                 <NavLink href="#news">News</NavLink>
                 <NavLink href="#pricing">Pricing</NavLink>
@@ -59,7 +69,7 @@ export const Navbar = () => {
                 <Button 
                   onClick={handleLogout}
                   variant="outline" 
-                  className="text-dtoad-text hover:text-dtoad-primary"
+                  className="text-dtoad-text hover:text-dtoad-primary font-semibold"
                 >
                   Logout
                 </Button>
@@ -67,13 +77,13 @@ export const Navbar = () => {
                 <>
                   <Button 
                     variant="outline" 
-                    className="mr-3"
+                    className="mr-3 font-semibold"
                     onClick={handleLogin}
                   >
                     Login
                   </Button>
                   <Button 
-                    className="bg-dtoad-primary hover:bg-dtoad-primary/90"
+                    className="bg-dtoad-primary hover:bg-dtoad-primary/90 font-semibold"
                     onClick={handleLogin}
                   >
                     Sign Up
@@ -101,7 +111,6 @@ export const Navbar = () => {
       {isOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <MobileNavLink href="#features">Features</MobileNavLink>
             <MobileNavLink href="/tasks">Tasks</MobileNavLink>
             <MobileNavLink href="#news">News</MobileNavLink>
             <MobileNavLink href="#pricing">Pricing</MobileNavLink>
@@ -112,7 +121,7 @@ export const Navbar = () => {
                 <Button
                   onClick={handleLogout}
                   variant="outline"
-                  className="w-full text-center justify-center"
+                  className="w-full text-center justify-center font-semibold"
                 >
                   Logout
                 </Button>
@@ -120,13 +129,13 @@ export const Navbar = () => {
                 <>
                   <Button
                     variant="outline"
-                    className="w-full mb-2 text-center justify-center"
+                    className="w-full mb-2 text-center justify-center font-semibold"
                     onClick={handleLogin}
                   >
                     Login
                   </Button>
                   <Button 
-                    className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center"
+                    className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center font-semibold"
                     onClick={handleLogin}
                   >
                     Sign Up
@@ -150,7 +159,7 @@ const NavLink = ({
 }) => (
   <a
     href={href}
-    className="text-dtoad-text-secondary hover:text-dtoad-primary px-3 py-2 rounded-md text-sm font-medium transition-colors"
+    className="text-dtoad-text-secondary hover:text-dtoad-primary px-3 py-2 rounded-md text-sm font-semibold transition-colors"
   >
     {children}
   </a>
@@ -165,7 +174,7 @@ const MobileNavLink = ({
 }) => (
   <a
     href={href}
-    className="text-dtoad-text-secondary hover:text-dtoad-primary block px-3 py-2 rounded-md text-base font-medium"
+    className="text-dtoad-text-secondary hover:text-dtoad-primary block px-3 py-2 rounded-md text-base font-semibold"
   >
     {children}
   </a>
