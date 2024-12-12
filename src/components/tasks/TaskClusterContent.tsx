@@ -49,15 +49,15 @@ export function TaskClusterContent({ cluster }: TaskClusterContentProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-dtoad-text">{cluster.title}</h2>
+        <h2 className="text-2xl font-bold text-[#333333]">{cluster.title}</h2>
         <Select value={sortBy} onValueChange={(value: "reward" | "deadline" | "popularity") => setSortBy(value)}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] font-semibold">
             <SelectValue placeholder="Sort by..." />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="reward">Highest Reward</SelectItem>
-            <SelectItem value="deadline">Closest Deadline</SelectItem>
-            <SelectItem value="popularity">Most Popular</SelectItem>
+            <SelectItem value="reward" className="font-semibold">Highest Reward</SelectItem>
+            <SelectItem value="deadline" className="font-semibold">Closest Deadline</SelectItem>
+            <SelectItem value="popularity" className="font-semibold">Most Popular</SelectItem>
           </SelectContent>
         </Select>
       </div>

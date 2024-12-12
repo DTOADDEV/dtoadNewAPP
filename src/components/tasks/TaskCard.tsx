@@ -33,10 +33,10 @@ export function TaskCard({ task }: TaskCardProps) {
       <CardHeader>
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-dtoad-text group-hover:text-dtoad-primary transition-colors">
+            <h3 className="text-lg font-bold text-[#333333] group-hover:text-dtoad-primary transition-colors">
               {task.title}
             </h3>
-            <p className="text-sm text-dtoad-text/70 flex items-center gap-1">
+            <p className="text-sm font-semibold text-[#333333]/70 flex items-center gap-1">
               {task.category.name}
             </p>
           </div>
@@ -55,8 +55,8 @@ export function TaskCard({ task }: TaskCardProps) {
             className="w-full h-full object-cover"
           />
         </div>
-        <p className="text-sm text-dtoad-text/80 line-clamp-2 mb-4">{task.description}</p>
-        <div className="flex items-center gap-4 text-sm text-dtoad-text/60">
+        <p className="text-sm font-semibold text-[#333333]/80 line-clamp-2 mb-4">{task.description}</p>
+        <div className="flex items-center gap-4 text-sm font-semibold text-[#333333]/60">
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
             <span>{formatDistanceToNow(new Date(task.deadline), { addSuffix: true })}</span>
@@ -72,7 +72,7 @@ export function TaskCard({ task }: TaskCardProps) {
           <p className="text-lg font-bold text-dtoad-primary">{formatTokenAmount(task.reward)}</p>
         </div>
         <Button 
-          className="bg-dtoad-primary hover:bg-dtoad-primary/90 group-hover:translate-x-1 transition-all flex items-center gap-2"
+          className="bg-dtoad-primary hover:bg-dtoad-primary/90 group-hover:translate-x-1 transition-all flex items-center gap-2 font-bold"
         >
           Join Task
           <ChevronRight className="h-4 w-4" />

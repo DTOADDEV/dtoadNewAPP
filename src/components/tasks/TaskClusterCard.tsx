@@ -50,32 +50,36 @@ export function TaskClusterCard({ cluster, onClick }: TaskClusterCardProps) {
           <div className="flex items-center gap-2">
             <Video className="h-5 w-5 text-dtoad-primary" />
             <div>
-              <h3 className="text-lg font-semibold text-dtoad-text group-hover:text-dtoad-primary transition-colors">{cluster.title}</h3>
-              <p className="text-sm text-dtoad-text/70">{cluster.tasks.length} similar tasks</p>
+              <h3 className="text-lg font-bold text-[#333333] group-hover:text-dtoad-primary transition-colors">
+                {cluster.title}
+              </h3>
+              <p className="text-sm font-semibold text-[#333333]/70">
+                {cluster.tasks.length} similar tasks
+              </p>
             </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-dtoad-text/40 group-hover:text-dtoad-primary group-hover:translate-x-1 transition-all" />
+          <ChevronRight className="h-5 w-5 text-[#333333]/40 group-hover:text-dtoad-primary group-hover:translate-x-1 transition-all" />
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 text-sm text-dtoad-text/80">
+            <div className="flex items-center gap-2 text-sm font-semibold text-[#333333]/80">
               <Users className="h-4 w-4" />
               <span>{totalParticipants} participants</span>
             </div>
             {earliestDeadline && (
-              <div className="flex items-center gap-2 text-sm text-dtoad-text/80">
+              <div className="flex items-center gap-2 text-sm font-semibold text-[#333333]/80">
                 <Calendar className="h-4 w-4" />
                 <span>Earliest deadline: {formatDistanceToNow(earliestDeadline, { addSuffix: true })}</span>
               </div>
             )}
           </div>
           <div className="flex justify-between items-center">
-            <div className="text-sm text-dtoad-text/60">
+            <div className="text-sm font-semibold text-[#333333]/60">
               Average reward: {formatTokenAmount(averageReward)}
             </div>
-            <div className="font-semibold text-dtoad-primary">
+            <div className="font-bold text-dtoad-primary">
               Total: {formatTokenAmount(cluster.totalReward)}
             </div>
           </div>
