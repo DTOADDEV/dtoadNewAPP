@@ -9,36 +9,121 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      favorite_projects: {
+        Row: {
+          created_at: string
+          id: string
+          profile_id: string | null
+          project_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          profile_id?: string | null
+          project_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          profile_id?: string | null
+          project_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_projects_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
           created_at: string
           id: string
+          leaderboard_rank: number | null
+          referral_code: string | null
+          referrals_count: number | null
+          tasks_completed: number | null
+          tokens_held: number | null
           updated_at: string
           username: string | null
+          wallet_address: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           id: string
+          leaderboard_rank?: number | null
+          referral_code?: string | null
+          referrals_count?: number | null
+          tasks_completed?: number | null
+          tokens_held?: number | null
           updated_at?: string
           username?: string | null
+          wallet_address?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           id?: string
+          leaderboard_rank?: number | null
+          referral_code?: string | null
+          referrals_count?: number | null
+          tasks_completed?: number | null
+          tokens_held?: number | null
           updated_at?: string
           username?: string | null
+          wallet_address?: string | null
         }
         Relationships: []
+      }
+      recent_activities: {
+        Row: {
+          activity_type: string
+          created_at: string
+          description: string
+          id: string
+          profile_id: string | null
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string
+          description: string
+          id?: string
+          profile_id?: string | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          description?: string
+          id?: string
+          profile_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recent_activities_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_referral_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
