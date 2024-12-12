@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -99,21 +100,23 @@ export default function Tasks() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-dtoad-background border-dtoad-primary/20">
-              <DropdownMenuItem
-                className="text-dtoad-text hover:bg-dtoad-primary/20"
-                onClick={() => setSelectedCategory(null)}
-              >
-                All Categories
-              </DropdownMenuItem>
-              {categories?.map((category) => (
+              <ScrollArea className="h-[200px]">
                 <DropdownMenuItem
-                  key={category.id}
                   className="text-dtoad-text hover:bg-dtoad-primary/20"
-                  onClick={() => setSelectedCategory(category.id)}
+                  onClick={() => setSelectedCategory(null)}
                 >
-                  {category.name}
+                  All Categories
                 </DropdownMenuItem>
-              ))}
+                {categories?.map((category) => (
+                  <DropdownMenuItem
+                    key={category.id}
+                    className="text-dtoad-text hover:bg-dtoad-primary/20"
+                    onClick={() => setSelectedCategory(category.id)}
+                  >
+                    {category.name}
+                  </DropdownMenuItem>
+                ))}
+              </ScrollArea>
             </DropdownMenuContent>
           </DropdownMenu>
           <Select value={sortBy} onValueChange={(value: "reward" | "deadline" | "popularity") => setSortBy(value)}>
