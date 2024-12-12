@@ -75,7 +75,7 @@ export default function Tasks() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8 pt-24">
+    <div className="container mx-auto px-4 py-8 pt-24 bg-gradient-to-br from-dtoad-background via-dtoad-background-light to-dtoad-background min-h-screen">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-dtoad-text mb-4">Explore Tasks</h1>
         <div className="flex flex-col md:flex-row gap-4">
@@ -85,21 +85,21 @@ export default function Tasks() {
               placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-dtoad-background/50 border-dtoad-primary/20 text-dtoad-text"
+              className="pl-10 bg-white/50 border-dtoad-primary/20 text-dtoad-text"
             />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="md:w-auto w-full flex items-center gap-2 border-dtoad-primary/20 text-dtoad-text bg-dtoad-background/50"
+                className="md:w-auto w-full flex items-center gap-2 border-dtoad-primary/20 text-dtoad-text bg-white/50"
               >
                 <Filter className="h-4 w-4" />
                 Categories
                 <ChevronDown className="h-4 w-4 ml-2" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-dtoad-background border-dtoad-primary/20">
+            <DropdownMenuContent className="w-56 bg-white/90 border-dtoad-primary/20">
               <ScrollArea className="h-[200px]">
                 <DropdownMenuItem
                   className="text-dtoad-text hover:bg-dtoad-primary/20"
@@ -120,10 +120,10 @@ export default function Tasks() {
             </DropdownMenuContent>
           </DropdownMenu>
           <Select value={sortBy} onValueChange={(value: "reward" | "deadline" | "popularity") => setSortBy(value)}>
-            <SelectTrigger className="w-[180px] bg-dtoad-background/50 border-dtoad-primary/20 text-dtoad-text">
+            <SelectTrigger className="w-[180px] bg-white/50 border-dtoad-primary/20 text-dtoad-text">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
-            <SelectContent className="bg-dtoad-background border-dtoad-primary/20">
+            <SelectContent className="bg-white/90 border-dtoad-primary/20">
               <SelectItem value="reward" className="text-dtoad-text">Highest Reward</SelectItem>
               <SelectItem value="deadline" className="text-dtoad-text">Closest Deadline</SelectItem>
               <SelectItem value="popularity" className="text-dtoad-text">Most Popular</SelectItem>

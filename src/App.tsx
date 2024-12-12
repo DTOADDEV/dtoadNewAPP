@@ -21,7 +21,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div className="min-h-screen bg-dtoad-background text-dtoad-text">
+        <div className="min-h-screen bg-gradient-to-br from-dtoad-background via-dtoad-background-light to-dtoad-background text-dtoad-text">
           <Navbar />
           <Routes>
             <Route path="/" element={<Index />} />
