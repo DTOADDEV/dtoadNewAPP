@@ -228,6 +228,7 @@ export type Database = {
           reward: number
           task_type: string
           title: string
+          transaction_hash: string | null
           updated_at: string
         }
         Insert: {
@@ -243,6 +244,7 @@ export type Database = {
           reward?: number
           task_type?: string
           title: string
+          transaction_hash?: string | null
           updated_at?: string
         }
         Update: {
@@ -258,6 +260,7 @@ export type Database = {
           reward?: number
           task_type?: string
           title?: string
+          transaction_hash?: string | null
           updated_at?: string
         }
         Relationships: [
