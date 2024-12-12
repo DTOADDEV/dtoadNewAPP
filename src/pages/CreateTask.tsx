@@ -6,6 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -14,20 +21,47 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Session } from "@supabase/supabase-js";
-import { PlusCircle, MinusCircle } from "lucide-react";
+import { PlusCircle, MinusCircle, Upload, Coins, Wallet } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 interface TaskForm {
   title: string;
   description: string;
   isHot: boolean;
+  category: string;
+  rewardType: "dtoad_tokens" | "airdrop_tokens";
+  rewardAmount: number;
+  image?: File;
+  transactionHash?: string;
 }
+
+const PLATFORM_WALLET = "0x1234567890abcdef"; // Replace with actual platform wallet address
 
 const CreateTask = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [isMultipleTasks, setIsMultipleTasks] = useState(false);
-  const [tasks, setTasks] = useState<TaskForm[]>([{ title: "", description: "", isHot: false }]);
+  const [tasks, setTasks] = useState<TaskForm[]>([{
+    title: "",
+    description: "",
+    isHot: false,
+    category: "",
+    rewardType: "dtoad_tokens",
+    rewardAmount: 0
+  }]);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const { data: categories } = useQuery({
+    queryKey: ["taskCategories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("task_categories")
+        .select("*")
+        .order("name");
+      if (error) throw error;
+      return data;
+    },
+  });
 
   useEffect(() => {
     // Get initial session
@@ -54,8 +88,41 @@ const CreateTask = () => {
     return () => subscription.unsubscribe();
   }, [navigate, toast]);
 
+  const handleImageUpload = async (file: File, index: number) => {
+    if (!file) return null;
+
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${crypto.randomUUID()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('task-images')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      toast({
+        title: "Error uploading image",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+      return null;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('task-images')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
   const handleAddTask = () => {
-    setTasks([...tasks, { title: "", description: "", isHot: false }]);
+    setTasks([...tasks, {
+      title: "",
+      description: "",
+      isHot: false,
+      category: "",
+      rewardType: "dtoad_tokens",
+      rewardAmount: 0
+    }]);
   };
 
   const handleRemoveTask = (index: number) => {
@@ -63,7 +130,7 @@ const CreateTask = () => {
     setTasks(newTasks);
   };
 
-  const handleTaskChange = (index: number, field: keyof TaskForm, value: string | boolean) => {
+  const handleTaskChange = (index: number, field: keyof TaskForm, value: any) => {
     const newTasks = [...tasks];
     newTasks[index] = { ...newTasks[index], [field]: value };
     setTasks(newTasks);
@@ -75,12 +142,21 @@ const CreateTask = () => {
 
     try {
       for (const task of tasks) {
+        let imageUrl = null;
+        if (task.image) {
+          imageUrl = await handleImageUpload(task.image, tasks.indexOf(task));
+        }
+
         const { error } = await supabase.from("tasks").insert({
           title: task.title,
           description: task.description,
           is_hot: task.isHot,
           task_type: task.isHot ? "hot" : "normal",
-          reward: task.isHot ? 50 : 20,
+          reward: task.rewardAmount,
+          reward_type: task.rewardType,
+          transaction_hash: task.transactionHash,
+          image_url: imageUrl,
+          approval_status: "pending"
         });
 
         if (error) throw error;
@@ -137,15 +213,34 @@ const CreateTask = () => {
               </div>
               <AccordionContent className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <Label htmlFor={`title-${index}`}>Title</Label>
+                  <Label htmlFor={`category-${index}`}>Category</Label>
+                  <Select
+                    value={task.category}
+                    onValueChange={(value) => handleTaskChange(index, "category", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories?.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`title-${index}`}>Custom Title (Optional)</Label>
                   <Input
                     id={`title-${index}`}
                     value={task.title}
                     onChange={(e) => handleTaskChange(index, "title", e.target.value)}
-                    required
-                    placeholder="Enter task title"
+                    placeholder="Enter custom task title"
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor={`description-${index}`}>Description</Label>
                   <Textarea
@@ -157,6 +252,101 @@ const CreateTask = () => {
                     className="min-h-[100px]"
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <Label>Reward Type</Label>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id={`reward-type-${index}`}
+                        checked={task.rewardType === "dtoad_tokens"}
+                        onCheckedChange={(checked) =>
+                          handleTaskChange(index, "rewardType", checked ? "dtoad_tokens" : "airdrop_tokens")
+                        }
+                      />
+                      <Label htmlFor={`reward-type-${index}`}>
+                        {task.rewardType === "dtoad_tokens" ? (
+                          <div className="flex items-center gap-1">
+                            <Coins className="h-4 w-4" />
+                            $DTOAD Tokens
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <Wallet className="h-4 w-4" />
+                            Airdrop Tokens
+                          </div>
+                        )}
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+
+                {task.rewardType === "airdrop_tokens" && (
+                  <div className="space-y-2 p-4 bg-dtoad-background-light rounded-lg">
+                    <p className="text-sm text-dtoad-text-secondary">
+                      Please send your tokens to our platform wallet:
+                    </p>
+                    <code className="block p-2 bg-white/50 rounded text-sm">
+                      {PLATFORM_WALLET}
+                    </code>
+                    <div className="space-y-2 mt-4">
+                      <Label htmlFor={`transaction-hash-${index}`}>Transaction Hash</Label>
+                      <Input
+                        id={`transaction-hash-${index}`}
+                        value={task.transactionHash}
+                        onChange={(e) => handleTaskChange(index, "transactionHash", e.target.value)}
+                        placeholder="Enter your transaction hash"
+                        required={task.rewardType === "airdrop_tokens"}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor={`reward-amount-${index}`}>Reward Amount</Label>
+                  <Input
+                    id={`reward-amount-${index}`}
+                    type="number"
+                    min="0"
+                    value={task.rewardAmount}
+                    onChange={(e) => handleTaskChange(index, "rewardAmount", parseFloat(e.target.value))}
+                    required
+                    placeholder="Enter reward amount"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`image-${index}`}>Task Image</Label>
+                  <div className="flex items-center gap-4">
+                    <Input
+                      id={`image-${index}`}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleTaskChange(index, "image", file);
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById(`image-${index}`)?.click()}
+                      className="w-full flex items-center justify-center gap-2"
+                    >
+                      <Upload className="h-5 w-5" />
+                      {task.image ? "Change Image" : "Upload Image"}
+                    </Button>
+                    {task.image && (
+                      <p className="text-sm text-dtoad-text-secondary">
+                        {task.image.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
                 <div className="flex items-center space-x-2">
                   <Switch
                     id={`hot-${index}`}
