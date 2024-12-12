@@ -10,7 +10,6 @@ export function Footer() {
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically integrate with a newsletter service
     toast({
       title: "Thanks for subscribing!",
       description: "You'll receive our newsletter at " + email,
@@ -27,7 +26,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-white/80 backdrop-blur-sm border-t mt-auto">
+    <footer className="bg-dtoad-background/90 backdrop-blur-sm border-t border-dtoad-background-dark mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Information */}
@@ -35,22 +34,22 @@ export function Footer() {
             <h3 className="font-semibold text-dtoad-primary">Company</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/privacy" className="text-gray-600 hover:text-dtoad-primary transition-colors">
+                <a href="/privacy" className="text-dtoad-text hover:text-dtoad-primary transition-colors">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="/faq" className="text-gray-600 hover:text-dtoad-primary transition-colors">
+                <a href="/faq" className="text-dtoad-text hover:text-dtoad-primary transition-colors">
                   FAQ
                 </a>
               </li>
               <li>
-                <a href="/terms" className="text-gray-600 hover:text-dtoad-primary transition-colors">
+                <a href="/terms" className="text-dtoad-text hover:text-dtoad-primary transition-colors">
                   Terms & Conditions
                 </a>
               </li>
               <li>
-                <a href="/about" className="text-gray-600 hover:text-dtoad-primary transition-colors">
+                <a href="/about" className="text-dtoad-text hover:text-dtoad-primary transition-colors">
                   About Us
                 </a>
               </li>
@@ -61,7 +60,7 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold text-dtoad-primary">Contact</h3>
             <div className="space-y-2">
-              <div className="flex items-center space-x-2 text-gray-600">
+              <div className="flex items-center space-x-2 text-dtoad-text">
                 <Mail className="h-4 w-4" />
                 <a href="mailto:support@dtoad.com" className="hover:text-dtoad-primary transition-colors">
                   support@dtoad.com
@@ -80,10 +79,10 @@ export function Footer() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="max-w-xs"
+                  className="max-w-xs bg-dtoad-background-light/50"
                   required
                 />
-                <Button type="submit" variant="default">
+                <Button type="submit" variant="default" className="bg-dtoad-primary hover:bg-dtoad-secondary">
                   Subscribe
                 </Button>
               </div>
@@ -92,7 +91,7 @@ export function Footer() {
         </div>
 
         {/* Social Links */}
-        <div className="mt-8 pt-8 border-t border-gray-200">
+        <div className="mt-8 pt-8 border-t border-dtoad-background-dark">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <div className="flex space-x-6">
               {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -101,14 +100,14 @@ export function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-dtoad-primary transition-colors"
+                  className="text-dtoad-text hover:text-dtoad-primary transition-colors"
                   aria-label={label}
                 >
                   <Icon className="h-6 w-6" />
                 </a>
               ))}
             </div>
-            <p className="text-gray-500 text-sm">© 2024 DToad. All rights reserved.</p>
+            <p className="text-dtoad-text-secondary text-sm">© 2024 DToad. All rights reserved.</p>
           </div>
         </div>
       </div>
