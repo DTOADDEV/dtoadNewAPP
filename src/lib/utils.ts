@@ -7,13 +7,19 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatTokenAmount(amount: number): string {
   if (amount >= 1000000000) {
-    return `${(amount / 1000000000).toFixed(0)}B $DTOAD`;
+    const billions = amount / 1000000000;
+    const formatted = billions >= 10 ? billions.toFixed(0) : billions.toFixed(1);
+    return `${formatted}B $DTOAD`;
   }
   if (amount >= 1000000) {
-    return `${(amount / 1000000).toFixed(0)}M $DTOAD`;
+    const millions = amount / 1000000;
+    const formatted = millions >= 10 ? millions.toFixed(0) : millions.toFixed(1);
+    return `${formatted}M $DTOAD`;
   }
   if (amount >= 1000) {
-    return `${(amount / 1000).toFixed(0)}k $DTOAD`;
+    const thousands = amount / 1000;
+    const formatted = thousands >= 10 ? thousands.toFixed(0) : thousands.toFixed(1);
+    return `${formatted}K $DTOAD`;
   }
   return `${amount} $DTOAD`;
 }
