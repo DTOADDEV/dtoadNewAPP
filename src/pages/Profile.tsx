@@ -283,9 +283,7 @@ export default function Profile() {
             <TabsContent value="settings">
               <SettingsContent
                 walletAddress={profile.wallet_address}
-                referralCode={profile.referral_code}
                 onConnectWallet={connectWallet}
-                onGenerateReferralCode={generateReferralCode}
               />
             </TabsContent>
           </Tabs>

@@ -12,26 +12,47 @@ interface SettingsContentProps {
   onConnectWallet: () => void;
 }
 
+type Settings = {
+  theme: string;
+  fontSize: string;
+  email_notifications: {
+    account_updates: boolean;
+    task_updates: boolean;
+    platform_news: boolean;
+  };
+  push_notifications: {
+    new_tasks: boolean;
+    platform_updates: boolean;
+  };
+  privacy_settings: {
+    show_profile: boolean;
+    show_stats: boolean;
+    show_leaderboard: boolean;
+  };
+}
+
+const defaultSettings: Settings = {
+  theme: "light",
+  fontSize: "medium",
+  email_notifications: {
+    account_updates: true,
+    task_updates: true,
+    platform_news: true,
+  },
+  push_notifications: {
+    new_tasks: true,
+    platform_updates: true,
+  },
+  privacy_settings: {
+    show_profile: true,
+    show_stats: true,
+    show_leaderboard: true,
+  },
+};
+
 export function SettingsContent({ walletAddress, onConnectWallet }: SettingsContentProps) {
   const { toast } = useToast();
-  const [settings, setSettings] = useState({
-    theme: "light",
-    fontSize: "medium",
-    email_notifications: {
-      account_updates: true,
-      task_updates: true,
-      platform_news: true,
-    },
-    push_notifications: {
-      new_tasks: true,
-      platform_updates: true,
-    },
-    privacy_settings: {
-      show_profile: true,
-      show_stats: true,
-      show_leaderboard: true,
-    },
-  });
+  const [settings, setSettings] = useState<Settings>(defaultSettings);
 
   useEffect(() => {
     loadSettings();
@@ -42,20 +63,50 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) return;
 
+      // First try to get existing settings
       const { data, error } = await supabase
         .from("user_settings")
         .select("*")
         .eq("id", session.user.id)
         .single();
 
-      if (error) throw error;
-      if (data) {
+      if (error && error.code === "PGRST116") {
+        // Settings don't exist, create them
+        const { data: newSettings, error: insertError } = await supabase
+          .from("user_settings")
+          .insert([
+            {
+              id: session.user.id,
+              theme_preference: defaultSettings.theme,
+              font_size: defaultSettings.fontSize,
+              email_notifications: defaultSettings.email_notifications,
+              push_notifications: defaultSettings.push_notifications,
+              privacy_settings: defaultSettings.privacy_settings,
+            }
+          ])
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+        
+        if (newSettings) {
+          setSettings({
+            theme: newSettings.theme_preference,
+            fontSize: newSettings.font_size,
+            email_notifications: newSettings.email_notifications as Settings['email_notifications'],
+            push_notifications: newSettings.push_notifications as Settings['push_notifications'],
+            privacy_settings: newSettings.privacy_settings as Settings['privacy_settings'],
+          });
+        }
+      } else if (error) {
+        throw error;
+      } else if (data) {
         setSettings({
           theme: data.theme_preference,
           fontSize: data.font_size,
-          email_notifications: data.email_notifications,
-          push_notifications: data.push_notifications,
-          privacy_settings: data.privacy_settings,
+          email_notifications: data.email_notifications as Settings['email_notifications'],
+          push_notifications: data.push_notifications as Settings['push_notifications'],
+          privacy_settings: data.privacy_settings as Settings['privacy_settings'],
         });
       }
     } catch (error) {
@@ -68,7 +119,7 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
     }
   };
 
-  const updateSettings = async (newSettings: Partial<typeof settings>) => {
+  const updateSettings = async (newSettings: Partial<Settings>) => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) return;
