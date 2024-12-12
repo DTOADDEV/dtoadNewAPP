@@ -47,7 +47,7 @@ export const Navbar = () => {
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 <NavLink href="#features">Features</NavLink>
-                <NavLink href="#tasks">Tasks</NavLink>
+                <NavLink href="/tasks">Tasks</NavLink>
                 <NavLink href="#news">News</NavLink>
                 <NavLink href="#pricing">Pricing</NavLink>
               </div>
@@ -102,7 +102,7 @@ export const Navbar = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <MobileNavLink href="#features">Features</MobileNavLink>
-            <MobileNavLink href="#tasks">Tasks</MobileNavLink>
+            <MobileNavLink href="/tasks">Tasks</MobileNavLink>
             <MobileNavLink href="#news">News</MobileNavLink>
             <MobileNavLink href="#pricing">Pricing</MobileNavLink>
           </div>

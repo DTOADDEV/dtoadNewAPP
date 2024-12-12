@@ -3,6 +3,7 @@ import { Navbar } from "./components/Navbar";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import Tasks from "./pages/Tasks";
 import { Toaster } from "@/components/ui/toaster";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/tasks" element={<Tasks />} />
         </Routes>
         <Toaster />
       </div>
