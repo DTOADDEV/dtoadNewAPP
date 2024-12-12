@@ -6,6 +6,8 @@ import Profile from "./pages/Profile";
 import Tasks from "./pages/Tasks";
 import CreateTask from "./pages/CreateTask";
 import Dashboard from "./pages/Dashboard";
+import News from "./pages/News";
+import Pricing from "./pages/Pricing";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -32,6 +34,8 @@ function App() {
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/create-task" element={<CreateTask />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/explore-tasks" element={<Navigate to="/tasks" replace />} />
           </Routes>
           <Toaster />

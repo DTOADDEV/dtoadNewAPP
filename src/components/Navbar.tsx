@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Menu, X, Plus, DollarSign, ToggleLeft, ToggleRight } from "lucide-react";
+import { Menu, X, Plus, ToggleLeft, ToggleRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
+import { NavLink } from "./navigation/NavLink";
+import { MobileNavLink } from "./navigation/MobileNavLink";
+import { Logo } from "./navigation/Logo";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,12 +15,10 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       console.log("Auth state changed:", session ? "logged in" : "logged out");
@@ -44,27 +45,25 @@ export const Navbar = () => {
     }
   };
 
+  const handleMobileMenuClick = (path: string) => {
+    navigate(path);
+    setIsOpen(false);
+  };
+
   return (
     <nav className="fixed w-full z-50 bg-dtoad-background/80 backdrop-blur-lg border-b border-dtoad-primary/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div 
-                onClick={handleLogoClick}
-                className="flex items-center gap-1 cursor-pointer group"
-              >
-                <DollarSign className="h-8 w-8 text-dtoad-primary group-hover:text-dtoad-accent transition-colors" />
-                <span className="text-3xl font-extrabold bg-gradient-to-r from-dtoad-primary to-dtoad-accent bg-clip-text text-transparent group-hover:from-dtoad-accent group-hover:to-dtoad-primary transition-all">
-                  DTOAD
-                </span>
-              </div>
+              <Logo onClick={handleLogoClick} />
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
+                <NavLink href="/dashboard">Dashboard</NavLink>
                 <NavLink href="/tasks">Tasks</NavLink>
-                <NavLink href="#news">News</NavLink>
-                <NavLink href="#pricing">Pricing</NavLink>
+                <NavLink href="/news">News</NavLink>
+                <NavLink href="/pricing">Pricing</NavLink>
               </div>
             </div>
           </div>
@@ -123,15 +122,25 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <MobileNavLink href="/tasks">Tasks</MobileNavLink>
-            <MobileNavLink href="#news">News</MobileNavLink>
-            <MobileNavLink href="#pricing">Pricing</MobileNavLink>
+            <MobileNavLink href="/dashboard" onClick={() => handleMobileMenuClick("/dashboard")}>
+              Dashboard
+            </MobileNavLink>
+            <MobileNavLink href="/tasks" onClick={() => handleMobileMenuClick("/tasks")}>
+              Tasks
+            </MobileNavLink>
+            <MobileNavLink href="/news" onClick={() => handleMobileMenuClick("/news")}>
+              News
+            </MobileNavLink>
+            <MobileNavLink href="/pricing" onClick={() => handleMobileMenuClick("/pricing")}>
+              Pricing
+            </MobileNavLink>
             {session && (
-              <MobileNavLink href="/create-task">Create Task</MobileNavLink>
+              <MobileNavLink href="/create-task" onClick={() => handleMobileMenuClick("/create-task")}>
+                Create Task
+              </MobileNavLink>
             )}
           </div>
           <div className="pt-4 pb-3 border-t border-dtoad-primary/20">
@@ -169,33 +178,3 @@ export const Navbar = () => {
     </nav>
   );
 };
-
-const NavLink = ({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) => (
-  <a
-    href={href}
-    className="text-dtoad-text-secondary hover:text-dtoad-primary px-3 py-2 rounded-md text-sm font-semibold transition-colors"
-  >
-    {children}
-  </a>
-);
-
-const MobileNavLink = ({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) => (
-  <a
-    href={href}
-    className="text-dtoad-text-secondary hover:text-dtoad-primary block px-3 py-2 rounded-md text-base font-semibold"
-  >
-    {children}
-  </a>
-);
