@@ -77,10 +77,10 @@ export function TaskClusterCard({ cluster, onClick }: TaskClusterCardProps) {
           </div>
           <div className="flex justify-between items-center">
             <div className="text-sm font-semibold text-[#333333]/60">
-              Average reward: {formatTokenAmount(averageReward)}
+              Average reward: {formatTokenAmount(Number(averageReward))}
             </div>
             <div className="font-bold text-dtoad-primary">
-              Total: {formatTokenAmount(cluster.totalReward)}
+              Total: {formatTokenAmount(Number(cluster.totalReward))}
             </div>
           </div>
         </div>

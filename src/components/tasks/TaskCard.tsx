@@ -69,7 +69,7 @@ export function TaskCard({ task }: TaskCardProps) {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <div className="text-right">
-          <p className="text-lg font-bold text-dtoad-primary">{formatTokenAmount(task.reward)}</p>
+          <p className="text-lg font-bold text-dtoad-primary">{formatTokenAmount(Number(task.reward))}</p>
         </div>
         <Button 
           className="bg-dtoad-primary hover:bg-dtoad-primary/90 group-hover:translate-x-1 transition-all flex items-center gap-2 font-bold"
