@@ -115,6 +115,52 @@ export type Database = {
           },
         ]
       }
+      referrals: {
+        Row: {
+          created_at: string | null
+          id: string
+          referred_user_id: string | null
+          referrer_id: string | null
+          task_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          referred_user_id?: string | null
+          referrer_id?: string | null
+          task_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          referred_user_id?: string | null
+          referrer_id?: string | null
+          task_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referred_user_id_fkey"
+            columns: ["referred_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       task_categories: {
         Row: {
           created_at: string
@@ -140,6 +186,7 @@ export type Database = {
           deadline: string | null
           description: string
           id: string
+          image_url: string | null
           is_hot: boolean | null
           participant_count: number | null
           reward: number
@@ -152,6 +199,7 @@ export type Database = {
           deadline?: string | null
           description: string
           id?: string
+          image_url?: string | null
           is_hot?: boolean | null
           participant_count?: number | null
           reward?: number
@@ -164,6 +212,7 @@ export type Database = {
           deadline?: string | null
           description?: string
           id?: string
+          image_url?: string | null
           is_hot?: boolean | null
           participant_count?: number | null
           reward?: number
@@ -305,6 +354,13 @@ export type Database = {
     Functions: {
       generate_referral_code: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_share_url: {
+        Args: {
+          task_id: string
+          referrer_id: string
+        }
         Returns: string
       }
     }
