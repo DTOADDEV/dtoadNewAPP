@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { TaskCarousel } from "@/components/tasks/TaskCarousel";
 import { TaskGrid } from "@/components/tasks/TaskGrid";
-import { TaskFilters } from "@/components/tasks/TaskFilters";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
