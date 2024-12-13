@@ -21,7 +21,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Session } from "@supabase/supabase-js";
-import { PlusCircle, MinusCircle, Upload, Coins, Wallet } from "lucide-react";
+import { PlusCircle, MinusCircle, Upload, Coins, Wallet, ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SocialMediaLinks, SocialLink } from "@/components/tasks/SocialMediaLinks";
 
@@ -244,8 +244,9 @@ const CreateTask = () => {
           {tasks.map((task, index) => (
             <AccordionItem key={index} value={`task-${index}`} className="border rounded-lg p-4">
               <div className="flex items-center justify-between">
-                <AccordionTrigger className="text-lg font-semibold">
+                <AccordionTrigger className="text-lg font-semibold group">
                   {task.title || `Task ${index + 1}`}
+                  <ChevronDown className="h-5 w-5 shrink-0 text-dtoad-primary transition-transform duration-200 group-data-[state=open]:rotate-180 animate-bounce-down" />
                 </AccordionTrigger>
                 {isMultipleTasks && tasks.length > 1 && (
                   <Button
