@@ -1,38 +1,20 @@
 import { useEffect, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { ProfileHeader } from "@/components/profile/ProfileHeader";
-import { MetricsCards } from "@/components/profile/MetricsCards";
-import { FavoriteProjects } from "@/components/profile/FavoriteProjects";
-import { NotificationSettings } from "@/components/settings/NotificationSettings";
-import { SettingsContent } from "@/components/profile/SettingsContent";
-import { useProfileBio } from "@/hooks/useProfileBio";
+import { ProfileTabs } from "@/components/profile/ProfileTabs";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { useProfile } from "@/hooks/useProfile";
 import { Loader } from "lucide-react";
-
-const demoProjects = [
-  {
-    title: "DeFi Integration",
-    description: "Smart contract integration for decentralized finance"
-  },
-  {
-    title: "NFT Marketplace",
-    description: "Digital marketplace for NFT trading"
-  }
-];
 
 export default function Profile() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { profile, isLoading, getProfile } = useProfile();
-  const [isUploading, setIsUploading] = useState(false);
   const [session, setSession] = useState(null);
 
   useEffect(() => {
@@ -67,49 +49,6 @@ export default function Profile() {
         description: "Failed to load profile",
         variant: "destructive",
       });
-    }
-  }
-
-  async function uploadAvatar(event: React.ChangeEvent<HTMLInputElement>) {
-    try {
-      setIsUploading(true);
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
-
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${session.user.id}-${Math.random()}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ avatar_url: filePath })
-        .eq("id", session.user.id);
-
-      if (updateError) throw updateError;
-
-      toast({
-        title: "Success",
-        description: "Avatar updated successfully",
-      });
-
-      getProfile();
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-      toast({
-        title: "Error",
-        description: "Failed to upload avatar",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUploading(false);
     }
   }
 
@@ -151,42 +90,10 @@ export default function Profile() {
             </div>
           </div>
 
-          <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="w-full bg-[#0A1614] rounded-full p-1">
-              <TabsTrigger value="profile" className="flex-1 text-white data-[state=active]:bg-transparent">
-                Profile
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="flex-1 text-white data-[state=active]:bg-transparent">
-                Settings
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="profile" className="mt-6 space-y-6 animate-fade-in-up">
-              <div className="bg-[#1A2825] rounded-lg p-6">
-                <ProfileHeader
-                  profile={profile}
-                  onAvatarChange={uploadAvatar}
-                  isUploading={isUploading}
-                />
-              </div>
-
-              <MetricsCards
-                tokensHeld={profile.tokens_held}
-                tasksCompleted={profile.tasks_completed}
-                referralsCount={profile.referrals_count}
-                leaderboardRank={profile.leaderboard_rank}
-              />
-
-              <FavoriteProjects projects={demoProjects} />
-            </TabsContent>
-
-            <TabsContent value="settings">
-              <SettingsContent
-                walletAddress={profile.wallet_address}
-                onConnectWallet={() => {}}
-              />
-            </TabsContent>
-          </Tabs>
+          <ProfileTabs 
+            profile={profile}
+            onConnectWallet={() => {}}
+          />
         </div>
       </MainLayout>
     </ProfileProvider>
