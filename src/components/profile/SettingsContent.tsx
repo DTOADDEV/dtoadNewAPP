@@ -171,35 +171,35 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
 
   return (
     <Tabs defaultValue="account" className="w-full animate-fade-in-up">
-      <TabsList className="grid grid-cols-4 gap-4 bg-transparent">
+      <TabsList className="grid grid-cols-4 gap-4 bg-dtoad-background border border-dtoad-primary/20 rounded-lg p-1">
         <TabsTrigger
           value="account"
-          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white text-dtoad-text"
         >
           Account
         </TabsTrigger>
         <TabsTrigger
           value="notifications"
-          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white text-dtoad-text"
         >
           Notifications
         </TabsTrigger>
         <TabsTrigger
           value="appearance"
-          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white text-dtoad-text"
         >
           Appearance
         </TabsTrigger>
         <TabsTrigger
           value="privacy"
-          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+          className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white text-dtoad-text"
         >
           Privacy
         </TabsTrigger>
       </TabsList>
 
-      <div className="mt-6">
-        <TabsContent value="account" className="space-y-4">
+      <div className="mt-6 bg-dtoad-background rounded-lg border border-dtoad-primary/20">
+        <TabsContent value="account" className="p-6">
           <AccountSettings
             walletAddress={walletAddress}
             onConnectWallet={onConnectWallet}
@@ -207,7 +207,7 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
           />
         </TabsContent>
 
-        <TabsContent value="notifications">
+        <TabsContent value="notifications" className="p-6">
           <NotificationSettings
             settings={{
               email: settings.email_notifications,
@@ -222,7 +222,7 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
           />
         </TabsContent>
 
-        <TabsContent value="appearance">
+        <TabsContent value="appearance" className="p-6">
           <AppearanceSettings
             theme={settings.theme}
             fontSize={settings.fontSize}
@@ -231,7 +231,7 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
           />
         </TabsContent>
 
-        <TabsContent value="privacy">
+        <TabsContent value="privacy" className="p-6">
           <PrivacySettings
             settings={settings.privacy_settings}
             onUpdateSettings={(privacy_settings) => updateSettings({ privacy_settings })}

@@ -10,7 +10,7 @@ interface ProfileTabsProps {
 export function ProfileTabs({ profile, onConnectWallet }: ProfileTabsProps) {
   return (
     <Tabs defaultValue="profile" className="w-full">
-      <TabsList className="w-full bg-dtoad-background-dark/50 backdrop-blur-sm rounded-full p-1 border border-dtoad-primary/20">
+      <TabsList className="w-full bg-dtoad-background border border-dtoad-primary/20 rounded-full p-1">
         <TabsTrigger 
           value="profile" 
           className="flex-1 text-dtoad-text data-[state=active]:bg-dtoad-primary data-[state=active]:text-white transition-colors"
@@ -29,7 +29,7 @@ export function ProfileTabs({ profile, onConnectWallet }: ProfileTabsProps) {
         <ProfileContent profile={profile} />
       </TabsContent>
 
-      <TabsContent value="settings">
+      <TabsContent value="settings" className="mt-6">
         <SettingsContent
           walletAddress={profile?.wallet_address}
           onConnectWallet={onConnectWallet}

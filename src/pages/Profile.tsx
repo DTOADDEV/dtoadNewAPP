@@ -82,7 +82,7 @@ export default function Profile() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <Link to="/">
-                <Button variant="outline" size="icon" className="bg-dtoad-background-dark/50 border-dtoad-primary/20 hover:bg-dtoad-background-dark/70">
+                <Button variant="outline" size="icon" className="bg-dtoad-background border-dtoad-primary/20 hover:bg-dtoad-background-light">
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
               </Link>
