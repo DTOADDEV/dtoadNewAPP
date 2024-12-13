@@ -66,7 +66,7 @@ export default function Profile() {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-          <p className="text-lg text-gray-400">Profile not found</p>
+          <p className="text-lg text-dtoad-text-secondary">Profile not found</p>
           <Link to="/">
             <Button variant="outline">Return to Home</Button>
           </Link>
@@ -82,11 +82,11 @@ export default function Profile() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <Link to="/">
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" className="bg-dtoad-background-dark/50 border-dtoad-primary/20 hover:bg-dtoad-background-dark/70">
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-white">Profile</h1>
+              <h1 className="text-2xl font-bold text-dtoad-text">Profile</h1>
             </div>
           </div>
 

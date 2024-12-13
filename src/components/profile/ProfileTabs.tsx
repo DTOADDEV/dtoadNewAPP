@@ -10,16 +10,16 @@ interface ProfileTabsProps {
 export function ProfileTabs({ profile, onConnectWallet }: ProfileTabsProps) {
   return (
     <Tabs defaultValue="profile" className="w-full">
-      <TabsList className="w-full bg-[#0A1614] rounded-full p-1">
+      <TabsList className="w-full bg-dtoad-background-dark/50 backdrop-blur-sm rounded-full p-1 border border-dtoad-primary/20">
         <TabsTrigger 
           value="profile" 
-          className="flex-1 text-dtoad-text data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+          className="flex-1 text-dtoad-text data-[state=active]:bg-dtoad-primary data-[state=active]:text-white transition-colors"
         >
           Profile
         </TabsTrigger>
         <TabsTrigger 
           value="settings" 
-          className="flex-1 text-dtoad-text data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+          className="flex-1 text-dtoad-text data-[state=active]:bg-dtoad-primary data-[state=active]:text-white transition-colors"
         >
           Settings
         </TabsTrigger>

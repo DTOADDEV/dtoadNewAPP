@@ -53,7 +53,7 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, subtitle, icon }: MetricCardProps) {
   return (
-    <Card className="bg-[#1A2825] border-dtoad-primary/10">
+    <Card className="bg-gradient-to-br from-dtoad-background-dark to-dtoad-background border-dtoad-primary/20 hover:shadow-lg transition-all duration-300">
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-2">
           <p className="text-sm font-medium text-dtoad-text-secondary">{title}</p>

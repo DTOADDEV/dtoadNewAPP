@@ -20,7 +20,7 @@ export function ProfileContent({ profile }: ProfileContentProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-[#1A2825] rounded-lg p-6">
+      <div className="bg-gradient-to-br from-dtoad-background-dark to-dtoad-background rounded-lg p-6 shadow-lg">
         <ProfileHeader profile={profile} />
       </div>
 
