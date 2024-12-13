@@ -26,6 +26,7 @@ export default function Profile() {
   const [isUploading, setIsUploading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedBio, setEditedBio] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -41,8 +42,33 @@ export default function Profile() {
     }
   }
 
+  async function createProfile(userId: string, email: string) {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .insert([
+          {
+            id: userId,
+            username: email.split('@')[0],
+            tokens_held: 0,
+            tasks_completed: 0,
+            referrals_count: 0
+          }
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("Error creating profile:", error);
+      throw error;
+    }
+  }
+
   async function getProfile() {
     try {
+      setIsLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) return;
 
@@ -53,28 +79,14 @@ export default function Profile() {
         .eq("id", session.user.id)
         .single();
 
-      // If no profile exists, create one
-      if (!profile) {
-        const { data: newProfile, error: insertError } = await supabase
-          .from("profiles")
-          .insert([
-            { 
-              id: session.user.id,
-              username: session.user.email?.split('@')[0] || 'Anonymous',
-              tokens_held: 0,
-              tasks_completed: 0,
-              referrals_count: 0
-            }
-          ])
-          .select()
-          .single();
-
-        if (insertError) throw insertError;
-        profile = newProfile;
+      // If no profile exists and there's a PGRST116 error (no rows returned)
+      if (error?.code === 'PGRST116') {
+        console.log("No profile found, creating new profile...");
+        profile = await createProfile(session.user.id, session.user.email || '');
+      } else if (error) {
+        throw error;
       }
 
-      if (error && error.code !== 'PGRST116') throw error;
-      
       setProfile(profile);
       setEditedBio(profile?.bio || "");
     } catch (error) {
@@ -84,6 +96,8 @@ export default function Profile() {
         description: "Failed to load profile",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -222,8 +236,12 @@ export default function Profile() {
     }
   }
 
-  if (!profile) {
+  if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  if (!profile) {
+    return <div className="flex items-center justify-center min-h-screen">Profile not found</div>;
   }
 
   return (

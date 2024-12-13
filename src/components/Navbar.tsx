@@ -36,13 +36,35 @@ export const Navbar = () => {
 
   const fetchProfile = async (userId: string) => {
     try {
-      const { data: profile, error } = await supabase
+      let { data: profile, error } = await supabase
         .from('profiles')
         .select('avatar_url')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
+      // If no profile exists and there's a PGRST116 error (no rows returned)
+      if (error?.code === 'PGRST116') {
+        console.log("No profile found in Navbar, creating new profile...");
+        const { data: newProfile, error: createError } = await supabase
+          .from("profiles")
+          .insert([
+            {
+              id: userId,
+              username: session?.user?.email?.split('@')[0],
+              tokens_held: 0,
+              tasks_completed: 0,
+              referrals_count: 0
+            }
+          ])
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        profile = newProfile;
+      } else if (error) {
+        throw error;
+      }
+
       if (profile?.avatar_url) {
         setAvatarUrl(profile.avatar_url);
       }
