@@ -12,23 +12,29 @@ interface SettingsContentProps {
   onConnectWallet: () => void;
 }
 
+type EmailNotifications = {
+  account_updates: boolean;
+  task_updates: boolean;
+  platform_news: boolean;
+}
+
+type PushNotifications = {
+  new_tasks: boolean;
+  platform_updates: boolean;
+}
+
+type PrivacySettings = {
+  show_profile: boolean;
+  show_stats: boolean;
+  show_leaderboard: boolean;
+}
+
 type Settings = {
   theme: string;
   fontSize: string;
-  email_notifications: {
-    account_updates: boolean;
-    task_updates: boolean;
-    platform_news: boolean;
-  };
-  push_notifications: {
-    new_tasks: boolean;
-    platform_updates: boolean;
-  };
-  privacy_settings: {
-    show_profile: boolean;
-    show_stats: boolean;
-    show_leaderboard: boolean;
-  };
+  email_notifications: EmailNotifications;
+  push_notifications: PushNotifications;
+  privacy_settings: PrivacySettings;
 }
 
 const defaultSettings: Settings = {
@@ -110,9 +116,9 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
         setSettings({
           theme: data.theme_preference,
           fontSize: data.font_size,
-          email_notifications: data.email_notifications,
-          push_notifications: data.push_notifications,
-          privacy_settings: data.privacy_settings,
+          email_notifications: data.email_notifications as EmailNotifications,
+          push_notifications: data.push_notifications as PushNotifications,
+          privacy_settings: data.privacy_settings as PrivacySettings,
         });
       }
     } catch (error) {
