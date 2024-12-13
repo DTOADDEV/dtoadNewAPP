@@ -3,9 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { ProfileHeader } from "@/components/profile/ProfileHeader";
+import { UserHeader } from "@/components/profile/UserHeader";
 import { MetricsCards } from "@/components/profile/MetricsCards";
-import { ProfileContent } from "@/components/profile/ProfileContent";
+import { FavoriteProjects } from "@/components/profile/FavoriteProjects";
 import { SettingsContent } from "@/components/profile/SettingsContent";
 
 interface Profile {
@@ -14,25 +14,33 @@ interface Profile {
   avatar_url: string;
   bio: string;
   wallet_address: string;
-  referral_code: string;
   tokens_held: number;
   tasks_completed: number;
   referrals_count: number;
   leaderboard_rank: number;
 }
 
+const demoProjects = [
+  {
+    title: "DeFi Integration",
+    description: "Smart contract integration for decentralized finance",
+  },
+  {
+    title: "NFT Marketplace",
+    description: "Digital marketplace for NFT trading",
+  },
+];
+
 export default function Profile() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedBio, setEditedBio] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    getProfile();
     checkUser();
+    getProfile();
   }, []);
 
   async function checkUser() {
@@ -144,97 +152,13 @@ export default function Profile() {
     }
   }
 
-  async function updateBio() {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
-
-      const { error } = await supabase
-        .from("profiles")
-        .update({ bio: editedBio })
-        .eq("id", session.user.id);
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Bio updated successfully",
-      });
-
-      setIsEditing(false);
-      getProfile();
-    } catch (error) {
-      console.error("Error updating bio:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update bio",
-        variant: "destructive",
-      });
-    }
-  }
-
-  async function generateReferralCode() {
-    try {
-      const { data, error } = await supabase
-        .rpc('generate_referral_code');
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Referral code generated successfully",
-      });
-
-      getProfile();
-    } catch (error) {
-      console.error("Error generating referral code:", error);
-      toast({
-        title: "Error",
-        description: "Failed to generate referral code",
-        variant: "destructive",
-      });
-    }
-  }
-
-  async function connectWallet() {
-    try {
-      if (typeof window.ethereum === "undefined") {
-        toast({
-          title: "Error",
-          description: "Please install MetaMask to connect your wallet",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
-      if (accounts[0]) {
-        const { error } = await supabase
-          .from("profiles")
-          .update({ wallet_address: accounts[0] })
-          .eq("id", profile?.id);
-
-        if (error) throw error;
-
-        toast({
-          title: "Success",
-          description: "Wallet connected successfully",
-        });
-
-        getProfile();
-      }
-    } catch (error) {
-      console.error("Error connecting wallet:", error);
-      toast({
-        title: "Error",
-        description: "Failed to connect wallet",
-        variant: "destructive",
-      });
-    }
-  }
+  const handleInviteFriends = () => {
+    // Implement invite friends functionality
+    toast({
+      title: "Coming Soon",
+      description: "Invite friends feature will be available soon!",
+    });
+  };
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
@@ -245,67 +169,51 @@ export default function Profile() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen bg-gradient-to-b from-white to-dtoad-primary/5">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-          <ProfileHeader
-            username={profile.username}
-            avatarUrl={profile.avatar_url}
-            isUploading={isUploading}
-            onAvatarChange={uploadAvatar}
-          />
-          <div className="pt-20 pb-6 px-6">
-            <h2 className="text-2xl font-bold text-center text-gray-800">
-              {profile.username || "Anonymous"}
-            </h2>
-          </div>
-        </div>
+    <div className="container mx-auto px-4 py-8 min-h-screen">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <Tabs defaultValue="profile" className="space-y-6">
+          <TabsList className="bg-dtoad-secondary/50 border-none">
+            <TabsTrigger
+              value="profile"
+              className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+            >
+              Profile
+            </TabsTrigger>
+            <TabsTrigger
+              value="settings"
+              className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+            >
+              Settings
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="space-y-8">
-          <ProfileContent
-            bio={profile.bio}
-            isEditing={isEditing}
-            editedBio={editedBio}
-            onBioChange={setEditedBio}
-            onSaveBio={updateBio}
-            onEditToggle={() => setIsEditing(!isEditing)}
-          />
+          <TabsContent value="profile" className="space-y-6 animate-fade-in-up">
+            <UserHeader
+              username={profile.username}
+              walletAddress={profile.wallet_address}
+              avatarUrl={profile.avatar_url}
+              isUploading={isUploading}
+              onAvatarChange={uploadAvatar}
+              onInviteFriends={handleInviteFriends}
+            />
 
-          <MetricsCards
-            tokensHeld={profile.tokens_held}
-            tasksCompleted={profile.tasks_completed}
-            referralsCount={profile.referrals_count}
-            leaderboardRank={profile.leaderboard_rank}
-          />
+            <MetricsCards
+              tokensHeld={profile.tokens_held}
+              tasksCompleted={profile.tasks_completed}
+              referralsCount={profile.referrals_count}
+              leaderboardRank={profile.leaderboard_rank}
+            />
 
-          <Tabs defaultValue="profile" className="space-y-4">
-            <TabsList className="w-full grid grid-cols-2 gap-4 bg-transparent">
-              <TabsTrigger
-                value="profile"
-                className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-              >
-                Profile
-              </TabsTrigger>
-              <TabsTrigger
-                value="settings"
-                className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-              >
-                Settings
-              </TabsTrigger>
-            </TabsList>
+            <FavoriteProjects projects={demoProjects} />
+          </TabsContent>
 
-            <TabsContent value="profile" className="space-y-4 animate-fade-in-up">
-              {/* Additional profile content can go here */}
-            </TabsContent>
-
-            <TabsContent value="settings">
-              <SettingsContent
-                walletAddress={profile.wallet_address}
-                onConnectWallet={connectWallet}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
+          <TabsContent value="settings">
+            <SettingsContent
+              walletAddress={profile.wallet_address}
+              onConnectWallet={() => {}}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
