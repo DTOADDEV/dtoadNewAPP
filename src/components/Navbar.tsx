@@ -1,40 +1,54 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Menu, X, Plus, ToggleLeft, ToggleRight } from "lucide-react";
+import { Menu, X, Plus, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
 import { NavLink } from "./navigation/NavLink";
 import { MobileNavLink } from "./navigation/MobileNavLink";
 import { Logo } from "./navigation/Logo";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      }
       console.log("Auth state changed:", session ? "logged in" : "logged out");
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/login");
-  };
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('avatar_url')
+        .eq('id', userId)
+        .single();
 
-  const handleAuthClick = () => {
-    setIsSignUp(!isSignUp);
-    navigate("/login");
+      if (error) throw error;
+      if (profile?.avatar_url) {
+        setAvatarUrl(profile.avatar_url);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
   };
 
   const handleLogoClick = () => {
@@ -79,30 +93,27 @@ export const Navbar = () => {
                     <Plus className="h-4 w-4" />
                     Create Task
                   </Button>
-                  <Button 
-                    onClick={handleLogout}
-                    variant="outline" 
-                    className="text-dtoad-text hover:text-dtoad-primary font-semibold"
+                  <button
+                    onClick={() => navigate("/profile")}
+                    className="flex items-center justify-center h-8 w-8 rounded-full hover:ring-2 hover:ring-dtoad-primary transition-all"
                   >
-                    Logout
-                  </Button>
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage 
+                        src={avatarUrl ? `${supabase.storage.from("avatars").getPublicUrl(avatarUrl).data.publicUrl}` : undefined}
+                        alt="Profile" 
+                      />
+                      <AvatarFallback>
+                        <User className="h-4 w-4 text-dtoad-text" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
                 </>
               ) : (
                 <Button 
-                  onClick={handleAuthClick}
-                  className="bg-dtoad-primary hover:bg-dtoad-primary/90 font-semibold flex items-center gap-2"
+                  onClick={() => navigate("/login")}
+                  className="bg-dtoad-primary hover:bg-dtoad-primary/90 font-semibold"
                 >
-                  {isSignUp ? (
-                    <>
-                      Sign Up
-                      <ToggleRight className="h-5 w-5 ml-1" />
-                    </>
-                  ) : (
-                    <>
-                      Login
-                      <ToggleLeft className="h-5 w-5 ml-1" />
-                    </>
-                  )}
+                  Login
                 </Button>
               )}
             </div>
@@ -138,41 +149,28 @@ export const Navbar = () => {
               Pricing
             </MobileNavLink>
             {session && (
-              <MobileNavLink href="/create-task" onClick={() => handleMobileMenuClick("/create-task")}>
-                Create Task
-              </MobileNavLink>
+              <>
+                <MobileNavLink href="/create-task" onClick={() => handleMobileMenuClick("/create-task")}>
+                  Create Task
+                </MobileNavLink>
+                <MobileNavLink href="/profile" onClick={() => handleMobileMenuClick("/profile")}>
+                  Profile
+                </MobileNavLink>
+              </>
             )}
           </div>
-          <div className="pt-4 pb-3 border-t border-dtoad-primary/20">
-            <div className="px-2 space-y-1">
-              {session ? (
+          {!session && (
+            <div className="pt-4 pb-3 border-t border-dtoad-primary/20">
+              <div className="px-2 space-y-1">
                 <Button
-                  onClick={handleLogout}
-                  variant="outline"
-                  className="w-full text-center justify-center font-semibold"
+                  onClick={() => navigate("/login")}
+                  className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center"
                 >
-                  Logout
+                  Login
                 </Button>
-              ) : (
-                <Button 
-                  onClick={handleAuthClick}
-                  className="w-full bg-dtoad-primary hover:bg-dtoad-primary/90 text-center justify-center font-semibold flex items-center gap-2"
-                >
-                  {isSignUp ? (
-                    <>
-                      Sign Up
-                      <ToggleRight className="h-5 w-5 ml-1" />
-                    </>
-                  ) : (
-                    <>
-                      Login
-                      <ToggleLeft className="h-5 w-5 ml-1" />
-                    </>
-                  )}
-                </Button>
-              )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </nav>
