@@ -12,6 +12,17 @@ import { useProfileBio } from "@/hooks/useProfileBio";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { useProfile } from "@/hooks/useProfile";
 
+const demoProjects = [
+  {
+    title: "DeFi Integration",
+    description: "A comprehensive DeFi integration project showcasing various blockchain functionalities."
+  },
+  {
+    title: "NFT Marketplace",
+    description: "An innovative NFT marketplace with unique features and seamless user experience."
+  }
+];
+
 export default function Profile() {
   const navigate = useNavigate();
   const { toast } = useToast();
