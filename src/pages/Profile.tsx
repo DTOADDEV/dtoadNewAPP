@@ -16,11 +16,11 @@ import { Loader } from "lucide-react";
 const demoProjects = [
   {
     title: "DeFi Integration",
-    description: "A comprehensive DeFi integration project showcasing various blockchain functionalities."
+    description: "Smart contract integration for decentralized finance"
   },
   {
     title: "NFT Marketplace",
-    description: "An innovative NFT marketplace with unique features and seamless user experience."
+    description: "Digital marketplace for NFT trading"
   }
 ];
 
@@ -141,44 +141,41 @@ export default function Profile() {
 
   return (
     <ProfileProvider value={{ profile, getProfile }}>
-      <div className="container mx-auto px-4 pt-20 pb-8 min-h-screen">
+      <div className="container mx-auto px-4 pt-20 pb-8 min-h-screen bg-[#1E2E2A]">
         <div className="max-w-6xl mx-auto space-y-6">
+          <p className="text-gray-400 mb-4">This is a demo of the profile functionality. Try exploring the different sections!</p>
+          
           <Tabs defaultValue="profile" className="space-y-6">
-            <div className="sticky top-20 z-40 bg-dtoad-background/80 backdrop-blur-lg py-2 rounded-lg shadow-sm">
-              <TabsList className="bg-dtoad-secondary/50 border-none w-full max-w-md mx-auto">
-                <TabsTrigger
-                  value="profile"
-                  className="flex-1 data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-                >
-                  Profile
-                </TabsTrigger>
-                <TabsTrigger
-                  value="settings"
-                  className="flex-1 data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-                >
-                  Settings
-                </TabsTrigger>
-              </TabsList>
+            <div className="sticky top-20 z-40">
+              <div className="bg-[#0A1614] rounded-full p-1 max-w-md mx-auto">
+                <TabsList className="w-full bg-transparent border-none">
+                  <TabsTrigger
+                    value="profile"
+                    className="flex-1 text-white data-[state=active]:bg-transparent"
+                  >
+                    Profile
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="settings"
+                    className="flex-1 text-white data-[state=active]:bg-transparent"
+                  >
+                    Settings
+                  </TabsTrigger>
+                </TabsList>
+              </div>
             </div>
 
             <TabsContent value="profile" className="space-y-6 animate-fade-in-up">
-              <UserHeader
-                username={profile.username}
-                walletAddress={profile.wallet_address}
-                avatarUrl={profile.avatar_url}
-                isUploading={isUploading}
-                onAvatarChange={uploadAvatar}
-                onInviteFriends={handleInviteFriends}
-              />
-
-              <ProfileContent
-                bio={profile.bio}
-                isEditing={isEditing}
-                editedBio={editedBio}
-                onBioChange={handleBioChange}
-                onSaveBio={handleSaveBio}
-                onEditToggle={toggleEdit}
-              />
+              <div className="bg-[#1A2825] rounded-lg p-6">
+                <UserHeader
+                  username={profile.username}
+                  walletAddress={profile.wallet_address}
+                  avatarUrl={profile.avatar_url}
+                  isUploading={isUploading}
+                  onAvatarChange={uploadAvatar}
+                  onInviteFriends={handleInviteFriends}
+                />
+              </div>
 
               <MetricsCards
                 tokensHeld={profile.tokens_held}

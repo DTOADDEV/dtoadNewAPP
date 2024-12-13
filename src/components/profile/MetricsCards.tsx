@@ -15,20 +15,23 @@ export function MetricsCards({
   leaderboardRank,
 }: MetricsCardsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <MetricCard
         title="Tokens Held"
-        value={`${tokensHeld.toLocaleString()} DTOAD`}
+        value={`${tokensHeld.toLocaleString()}`}
+        subtitle="DTOAD"
         icon={<Coins className="w-5 h-5 text-dtoad-primary" />}
       />
       <MetricCard
         title="Referrals"
-        value={`${referralsCount} Friends`}
+        value={`${referralsCount}`}
+        subtitle="Friends"
         icon={<Users className="w-5 h-5 text-dtoad-primary" />}
       />
       <MetricCard
         title="Tasks Completed"
-        value={`${tasksCompleted} Tasks`}
+        value={`${tasksCompleted}`}
+        subtitle="Tasks"
         icon={<Trophy className="w-5 h-5 text-dtoad-primary" />}
       />
       <MetricCard
@@ -50,17 +53,20 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, subtitle, icon }: MetricCardProps) {
   return (
-    <Card className="bg-dtoad-secondary/90 border-none hover:translate-y-[-2px] transition-all duration-200">
+    <Card className="bg-[#1A2825] border-none">
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-2">
-          <p className="text-sm font-medium text-dtoad-background-light">{title}</p>
+          <p className="text-sm font-medium text-gray-400">{title}</p>
           {icon}
         </div>
         <div className="space-y-1">
           <p className="text-2xl font-bold text-white">{value}</p>
           {subtitle && (
-            <p className="text-sm text-dtoad-background-light">{subtitle}</p>
+            <p className="text-sm text-gray-400">{subtitle}</p>
           )}
+        </div>
+        <div className="mt-4 h-1 bg-dtoad-primary/20 rounded-full">
+          <div className="h-full w-3/4 bg-dtoad-primary rounded-full"></div>
         </div>
       </CardContent>
     </Card>
