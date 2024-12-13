@@ -11,6 +11,7 @@ import { ProfileContent } from "@/components/profile/ProfileContent";
 import { useProfileBio } from "@/hooks/useProfileBio";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { useProfile } from "@/hooks/useProfile";
+import { Loader } from "lucide-react";
 
 const demoProjects = [
   {
@@ -28,16 +29,41 @@ export default function Profile() {
   const { toast } = useToast();
   const { profile, isLoading, getProfile } = useProfile();
   const [isUploading, setIsUploading] = useState(false);
+  const [session, setSession] = useState(null);
   const { editedBio, isEditing, handleBioChange, handleSaveBio, toggleEdit } = useProfileBio(profile?.bio || "");
 
   useEffect(() => {
     checkUser();
-  }, []);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        navigate("/login");
+      } else {
+        setSession(session);
+        getProfile();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   async function checkUser() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate("/login");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/login");
+        return;
+      }
+      setSession(session);
+      await getProfile();
+    } catch (error) {
+      console.error("Error checking user session:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load profile",
+        variant: "destructive",
+      });
     }
   }
 
@@ -92,11 +118,25 @@ export default function Profile() {
   };
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader className="w-8 h-8 animate-spin text-dtoad-primary" />
+      </div>
+    );
   }
 
   if (!profile) {
-    return <div className="flex items-center justify-center min-h-screen">Profile not found</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+        <p className="text-lg text-gray-600">Profile not found</p>
+        <button 
+          onClick={() => navigate("/")}
+          className="text-dtoad-primary hover:underline"
+        >
+          Return to Home
+        </button>
+      </div>
+    );
   }
 
   return (
