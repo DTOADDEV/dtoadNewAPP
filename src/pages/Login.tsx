@@ -32,12 +32,12 @@ const Login = () => {
           navigate("/");
         } else if (event === 'SIGNED_OUT') {
           console.log("User signed out");
-        } else if (event === 'USER_UPDATED') {
-          console.log("User updated");
-        } else if (event === 'USER_DELETED') {
-          console.log("User deleted");
         } else if (event === 'PASSWORD_RECOVERY') {
           console.log("Password recovery initiated");
+          toast({
+            title: "Password Recovery",
+            description: "Please check your email for password reset instructions.",
+          });
         }
       }
     );
@@ -75,14 +75,6 @@ const Login = () => {
             view="sign_in"
             showLinks={true}
             redirectTo={window.location.origin}
-            onError={(error) => {
-              console.error("Auth error:", error);
-              toast({
-                title: "Authentication Error",
-                description: error.message,
-                variant: "destructive",
-              });
-            }}
           />
         </div>
       </div>
