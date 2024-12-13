@@ -3,24 +3,41 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
+        console.log("User already logged in, redirecting to home");
         navigate("/");
       }
     });
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         console.log("Auth state changed:", event, session ? "logged in" : "logged out");
-        if (session) {
+        
+        if (event === 'SIGNED_IN') {
+          console.log("User signed in successfully");
+          toast({
+            title: "Welcome back!",
+            description: "You have successfully logged in.",
+          });
           navigate("/");
+        } else if (event === 'SIGNED_OUT') {
+          console.log("User signed out");
+        } else if (event === 'USER_UPDATED') {
+          console.log("User updated");
+        } else if (event === 'USER_DELETED') {
+          console.log("User deleted");
+        } else if (event === 'PASSWORD_RECOVERY') {
+          console.log("Password recovery initiated");
         }
       }
     );
@@ -28,7 +45,7 @@ const Login = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, [navigate, toast]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dtoad-background via-dtoad-background-light to-dtoad-background flex items-center justify-center px-4">
@@ -49,11 +66,23 @@ const Login = () => {
                   },
                 },
               },
+              className: {
+                message: 'text-red-600',
+                button: 'bg-dtoad-primary hover:bg-dtoad-primary/90',
+              },
             }}
             providers={[]}
             view="sign_in"
             showLinks={true}
             redirectTo={window.location.origin}
+            onError={(error) => {
+              console.error("Auth error:", error);
+              toast({
+                title: "Authentication Error",
+                description: error.message,
+                variant: "destructive",
+              });
+            }}
           />
         </div>
       </div>
