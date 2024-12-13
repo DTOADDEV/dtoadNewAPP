@@ -19,7 +19,7 @@ export default function Pricing() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {/* Normal Task Card */}
-        <Card className="bg-dtoad-secondary/20 border-none relative overflow-hidden">
+        <Card className="bg-dtoad-background-light/20 border-dtoad-primary/20 relative overflow-hidden">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-dtoad-text">
               <Star className="h-5 w-5 text-dtoad-primary" />
@@ -46,8 +46,8 @@ export default function Pricing() {
         </Card>
 
         {/* Hot Task Card */}
-        <Card className="bg-gradient-to-br from-dtoad-primary/20 to-dtoad-accent/20 border-none relative overflow-hidden">
-          <div className="absolute top-2 right-2 bg-dtoad-accent text-dtoad-secondary px-3 py-1 rounded-full text-sm font-semibold">
+        <Card className="bg-gradient-to-br from-dtoad-primary/20 to-dtoad-accent/20 border-dtoad-primary/20 relative overflow-hidden">
+          <div className="absolute top-2 right-2 bg-dtoad-accent text-dtoad-text px-3 py-1 rounded-full text-sm font-semibold">
             Popular
           </div>
           <CardHeader>
@@ -69,7 +69,7 @@ export default function Pricing() {
             </ul>
             <Button 
               onClick={() => handleCreateTask('hot')}
-              className="w-full bg-dtoad-accent hover:bg-dtoad-accent/90 text-dtoad-secondary"
+              className="w-full bg-dtoad-accent hover:bg-dtoad-accent/90 text-dtoad-text"
             >
               Create Hot Task
             </Button>

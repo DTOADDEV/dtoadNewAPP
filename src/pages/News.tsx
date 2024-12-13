@@ -52,7 +52,7 @@ export default function News() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {newsItems.map((item, index) => (
-          <Card key={index} className="bg-dtoad-secondary/20 border-none hover:bg-dtoad-secondary/30 transition-colors">
+          <Card key={index} className="bg-dtoad-background-light/20 border-dtoad-primary/20 hover:bg-dtoad-background-light/30 transition-colors">
             <CardHeader>
               <CardTitle className="text-lg text-dtoad-text">{item.title}</CardTitle>
             </CardHeader>

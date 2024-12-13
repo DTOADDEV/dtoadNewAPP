@@ -48,9 +48,9 @@ const Login = () => {
   }, [navigate, toast]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dtoad-background via-dtoad-background-light to-dtoad-background flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-dtoad-background via-dtoad-background-light to-dtoad-background-dark flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white/80 backdrop-blur-lg p-8 rounded-lg border border-dtoad-primary/20 shadow-xl">
+        <div className="bg-dtoad-background-light/80 backdrop-blur-lg p-8 rounded-lg border border-dtoad-primary/20 shadow-xl">
           <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-dtoad-primary to-dtoad-accent bg-clip-text text-transparent">
             Welcome to DToad
           </h2>
@@ -62,7 +62,7 @@ const Login = () => {
                 default: {
                   colors: {
                     brand: '#10B981',
-                    brandAccent: '#059669',
+                    brandAccent: '#064E3B',
                   },
                 },
               },
