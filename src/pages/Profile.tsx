@@ -141,23 +141,25 @@ export default function Profile() {
 
   return (
     <ProfileProvider value={{ profile, getProfile }}>
-      <div className="container mx-auto px-4 py-8 min-h-screen">
+      <div className="container mx-auto px-4 pt-20 pb-8 min-h-screen">
         <div className="max-w-6xl mx-auto space-y-6">
           <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="bg-dtoad-secondary/50 border-none">
-              <TabsTrigger
-                value="profile"
-                className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-              >
-                Profile
-              </TabsTrigger>
-              <TabsTrigger
-                value="settings"
-                className="data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
-              >
-                Settings
-              </TabsTrigger>
-            </TabsList>
+            <div className="sticky top-20 z-40 bg-dtoad-background/80 backdrop-blur-lg py-2 rounded-lg shadow-sm">
+              <TabsList className="bg-dtoad-secondary/50 border-none w-full max-w-md mx-auto">
+                <TabsTrigger
+                  value="profile"
+                  className="flex-1 data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+                >
+                  Profile
+                </TabsTrigger>
+                <TabsTrigger
+                  value="settings"
+                  className="flex-1 data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+                >
+                  Settings
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="profile" className="space-y-6 animate-fade-in-up">
               <UserHeader
