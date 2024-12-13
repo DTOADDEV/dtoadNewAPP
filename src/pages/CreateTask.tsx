@@ -54,14 +54,21 @@ const CreateTask = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const { data: categories } = useQuery({
+  const { data: categories, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["taskCategories"],
     queryFn: async () => {
+      console.log("Fetching task categories...");
       const { data, error } = await supabase
         .from("task_categories")
         .select("*")
         .order("name");
-      if (error) throw error;
+      
+      if (error) {
+        console.error("Error fetching categories:", error);
+        throw error;
+      }
+      
+      console.log("Categories fetched:", data);
       return data;
     },
   });
@@ -102,6 +109,7 @@ const CreateTask = () => {
       .upload(filePath, file);
 
     if (uploadError) {
+      console.error("Error uploading image:", uploadError);
       toast({
         title: "Error uploading image",
         description: "Please try again.",
@@ -153,6 +161,17 @@ const CreateTask = () => {
       return;
     }
 
+    // Validate that all tasks have a category selected
+    const invalidTasks = tasks.filter(task => !task.category);
+    if (invalidTasks.length > 0) {
+      toast({
+        title: "Category required",
+        description: "Please select a category for all tasks.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       console.log("Creating tasks with user ID:", session.user.id);
 
@@ -168,6 +187,8 @@ const CreateTask = () => {
           url: link.url
         }));
 
+        console.log("Inserting task with category_id:", task.category);
+
         const { error } = await supabase.from("tasks").insert({
           title: task.title,
           description: task.description,
@@ -178,9 +199,9 @@ const CreateTask = () => {
           transaction_hash: task.transactionHash,
           image_url: imageUrl,
           social_links: socialLinksJson,
-          category_id: task.category,
+          category_id: task.category || null, // Ensure we never send an empty string
           payment_status: "pending",
-          creator_id: session.user.id // Add the creator's ID
+          creator_id: session.user.id
         });
 
         if (error) {
