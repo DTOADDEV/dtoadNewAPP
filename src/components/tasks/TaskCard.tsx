@@ -1,13 +1,19 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Brush, Twitter } from "lucide-react";
+import { Calendar, Users, ChevronRight } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { ShareButton } from "./ShareButton";
 import { supabase } from "@/integrations/supabase/client";
+import { formatTokenAmount } from "@/lib/utils";
 
 interface Task {
   id: string;
   title: string;
   description: string;
+  reward: number;
+  deadline: string;
   participant_count: number;
+  image_url?: string;
   category: {
     name: string;
   };
@@ -17,50 +23,59 @@ interface TaskCardProps {
   task: Task;
 }
 
-const getTaskIcon = (category: string) => {
-  switch (category.toLowerCase()) {
-    case 'design':
-      return <Brush className="h-8 w-8 text-dtoad-accent/80" />;
-    case 'social':
-      return <Twitter className="h-8 w-8 text-dtoad-accent/80" />;
-    default:
-      return <Brush className="h-8 w-8 text-dtoad-accent/80" />;
-  }
-};
-
 export function TaskCard({ task }: TaskCardProps) {
+  const imageUrl = task.image_url 
+    ? `${supabase.storage.from("task-images").getPublicUrl(task.image_url).data.publicUrl}`
+    : "/placeholder.svg";
+
   return (
-    <Card className="h-full bg-[#222222] border-none transition-all duration-300 hover:scale-[1.02] rounded-2xl overflow-hidden">
-      <CardContent className="p-6 space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="p-4 bg-[#2A2A2A] rounded-xl">
-            {getTaskIcon(task.category.name)}
-          </div>
+    <Card className="h-full bg-dtoad-background/50 border-dtoad-primary/20 group hover:border-dtoad-primary/40 transition-all">
+      <CardHeader>
+        <div className="flex justify-between items-start">
           <div className="flex-1">
-            <h3 className="text-2xl font-bold text-dtoad-accent mb-2">
+            <h3 className="text-lg font-bold text-[#333333] group-hover:text-dtoad-primary transition-colors">
               {task.title}
             </h3>
-            <span className="inline-block px-4 py-1.5 bg-[#2A2A2A] text-dtoad-accent/80 text-sm font-medium rounded-full">
+            <p className="text-sm font-semibold text-[#333333]/70 flex items-center gap-1">
               {task.category.name}
-            </span>
+            </p>
+          </div>
+          <ShareButton 
+            taskId={task.id}
+            title={task.title}
+            imageUrl={task.image_url}
+          />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="aspect-video w-full mb-4 overflow-hidden rounded-lg bg-dtoad-background/20">
+          <img
+            src={imageUrl}
+            alt={task.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <p className="text-sm font-semibold text-[#333333]/80 line-clamp-2 mb-4">{task.description}</p>
+        <div className="flex items-center gap-4 text-sm font-semibold text-[#333333]/60">
+          <div className="flex items-center gap-1">
+            <Calendar className="h-4 w-4" />
+            <span>{formatDistanceToNow(new Date(task.deadline), { addSuffix: true })}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Users className="h-4 w-4" />
+            <span>{task.participant_count} participants</span>
           </div>
         </div>
-        
-        <p className="text-[#8E9196] text-lg">
-          {task.description}
-        </p>
-
-        <div className="flex items-center gap-2 text-[#8E9196]">
-          <Users className="h-5 w-5" />
-          <span className="text-lg">{task.participant_count} participants</span>
-        </div>
       </CardContent>
-
-      <CardFooter className="p-6 pt-0">
+      <CardFooter className="flex justify-between items-center">
+        <div className="text-right">
+          <p className="text-lg font-bold text-dtoad-primary">{formatTokenAmount(Number(task.reward))}</p>
+        </div>
         <Button 
-          className="w-full bg-[#2A2A2A] hover:bg-[#333333] text-dtoad-accent border-none text-lg font-semibold py-6"
+          className="bg-dtoad-primary hover:bg-dtoad-primary/90 group-hover:translate-x-1 transition-all flex items-center gap-2 font-bold"
         >
-          Complete Task
+          Join Task
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </CardFooter>
     </Card>
