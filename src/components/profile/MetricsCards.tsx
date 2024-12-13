@@ -53,16 +53,16 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, subtitle, icon }: MetricCardProps) {
   return (
-    <Card className="bg-[#1A2825] border-none">
+    <Card className="bg-[#1A2825] border-dtoad-primary/10">
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-2">
-          <p className="text-sm font-medium text-gray-400">{title}</p>
+          <p className="text-sm font-medium text-dtoad-text-secondary">{title}</p>
           {icon}
         </div>
         <div className="space-y-1">
-          <p className="text-2xl font-bold text-white">{value}</p>
+          <p className="text-2xl font-bold text-dtoad-text">{value}</p>
           {subtitle && (
-            <p className="text-sm text-gray-400">{subtitle}</p>
+            <p className="text-sm text-dtoad-text-secondary">{subtitle}</p>
           )}
         </div>
         <div className="mt-4 h-1 bg-dtoad-primary/20 rounded-full">

@@ -11,10 +11,16 @@ export function ProfileTabs({ profile, onConnectWallet }: ProfileTabsProps) {
   return (
     <Tabs defaultValue="profile" className="w-full">
       <TabsList className="w-full bg-[#0A1614] rounded-full p-1">
-        <TabsTrigger value="profile" className="flex-1 text-white data-[state=active]:bg-transparent">
+        <TabsTrigger 
+          value="profile" 
+          className="flex-1 text-dtoad-text data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+        >
           Profile
         </TabsTrigger>
-        <TabsTrigger value="settings" className="flex-1 text-white data-[state=active]:bg-transparent">
+        <TabsTrigger 
+          value="settings" 
+          className="flex-1 text-dtoad-text data-[state=active]:bg-dtoad-primary data-[state=active]:text-white"
+        >
           Settings
         </TabsTrigger>
       </TabsList>
