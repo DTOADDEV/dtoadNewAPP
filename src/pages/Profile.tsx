@@ -66,7 +66,7 @@ export default function Profile() {
     return (
       <MainLayout>
         <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-          <p className="text-lg text-dtoad-text-secondary">Profile not found</p>
+          <p className="text-lg text-dtoad-text">Profile not found</p>
           <Link to="/">
             <Button variant="outline">Return to Home</Button>
           </Link>

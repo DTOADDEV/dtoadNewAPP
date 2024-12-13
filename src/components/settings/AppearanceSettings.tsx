@@ -17,41 +17,41 @@ export function AppearanceSettings({
 }: AppearanceSettingsProps) {
   return (
     <div className="space-y-4">
-      <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
+      <Card className="bg-dtoad-background-dark/50 backdrop-blur-sm border-dtoad-primary/20">
         <CardHeader>
-          <CardTitle>Theme</CardTitle>
+          <CardTitle className="text-dtoad-text">Theme</CardTitle>
         </CardHeader>
         <CardContent>
           <RadioGroup value={theme} onValueChange={onUpdateTheme} className="space-y-2">
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="light" id="light" />
-              <Label htmlFor="light">Light</Label>
+              <RadioGroupItem value="light" id="light" className="border-dtoad-primary text-dtoad-primary" />
+              <Label htmlFor="light" className="text-dtoad-text">Light</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="dark" id="dark" />
-              <Label htmlFor="dark">Dark</Label>
+              <RadioGroupItem value="dark" id="dark" className="border-dtoad-primary text-dtoad-primary" />
+              <Label htmlFor="dark" className="text-dtoad-text">Dark</Label>
             </div>
           </RadioGroup>
         </CardContent>
       </Card>
 
-      <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
+      <Card className="bg-dtoad-background-dark/50 backdrop-blur-sm border-dtoad-primary/20">
         <CardHeader>
-          <CardTitle>Font Size</CardTitle>
+          <CardTitle className="text-dtoad-text">Font Size</CardTitle>
         </CardHeader>
         <CardContent>
           <RadioGroup value={fontSize} onValueChange={onUpdateFontSize} className="space-y-2">
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="small" id="small" />
-              <Label htmlFor="small">Small</Label>
+              <RadioGroupItem value="small" id="small" className="border-dtoad-primary text-dtoad-primary" />
+              <Label htmlFor="small" className="text-dtoad-text">Small</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="medium" id="medium" />
-              <Label htmlFor="medium">Medium</Label>
+              <RadioGroupItem value="medium" id="medium" className="border-dtoad-primary text-dtoad-primary" />
+              <Label htmlFor="medium" className="text-dtoad-text">Medium</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="large" id="large" />
-              <Label htmlFor="large">Large</Label>
+              <RadioGroupItem value="large" id="large" className="border-dtoad-primary text-dtoad-primary" />
+              <Label htmlFor="large" className="text-dtoad-text">Large</Label>
             </div>
           </RadioGroup>
         </CardContent>

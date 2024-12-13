@@ -42,57 +42,62 @@ export function NotificationSettings({ settings, onUpdateSettings }: Notificatio
 
   return (
     <div className="space-y-4">
-      <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
+      <Card className="bg-dtoad-background-dark/50 backdrop-blur-sm border-dtoad-primary/20">
         <CardHeader>
-          <CardTitle>Email Notifications</CardTitle>
+          <CardTitle className="text-dtoad-text">Email Notifications</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label htmlFor="account-updates">Account Updates</Label>
+            <Label htmlFor="account-updates" className="text-dtoad-text">Account Updates</Label>
             <Switch
               id="account-updates"
               checked={settings.email.account_updates}
               onCheckedChange={() => handleEmailToggle("account_updates")}
+              className="data-[state=checked]:bg-dtoad-primary"
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="task-updates">Task Updates</Label>
+            <Label htmlFor="task-updates" className="text-dtoad-text">Task Updates</Label>
             <Switch
               id="task-updates"
               checked={settings.email.task_updates}
               onCheckedChange={() => handleEmailToggle("task_updates")}
+              className="data-[state=checked]:bg-dtoad-primary"
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="platform-news">Platform News</Label>
+            <Label htmlFor="platform-news" className="text-dtoad-text">Platform News</Label>
             <Switch
               id="platform-news"
               checked={settings.email.platform_news}
               onCheckedChange={() => handleEmailToggle("platform_news")}
+              className="data-[state=checked]:bg-dtoad-primary"
             />
           </div>
         </CardContent>
       </Card>
 
-      <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
+      <Card className="bg-dtoad-background-dark/50 backdrop-blur-sm border-dtoad-primary/20">
         <CardHeader>
-          <CardTitle>Push Notifications</CardTitle>
+          <CardTitle className="text-dtoad-text">Push Notifications</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label htmlFor="new-tasks">New Tasks</Label>
+            <Label htmlFor="new-tasks" className="text-dtoad-text">New Tasks</Label>
             <Switch
               id="new-tasks"
               checked={settings.push.new_tasks}
               onCheckedChange={() => handlePushToggle("new_tasks")}
+              className="data-[state=checked]:bg-dtoad-primary"
             />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="platform-updates">Platform Updates</Label>
+            <Label htmlFor="platform-updates" className="text-dtoad-text">Platform Updates</Label>
             <Switch
               id="platform-updates"
               checked={settings.push.platform_updates}
               onCheckedChange={() => handlePushToggle("platform_updates")}
+              className="data-[state=checked]:bg-dtoad-primary"
             />
           </div>
         </CardContent>

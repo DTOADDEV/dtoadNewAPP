@@ -22,33 +22,36 @@ export function PrivacySettings({ settings, onUpdateSettings }: PrivacySettingsP
   };
 
   return (
-    <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
+    <Card className="bg-dtoad-background-dark/50 backdrop-blur-sm border-dtoad-primary/20">
       <CardHeader>
-        <CardTitle>Privacy Settings</CardTitle>
+        <CardTitle className="text-dtoad-text">Privacy Settings</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
-          <Label htmlFor="show-profile">Show Profile</Label>
+          <Label htmlFor="show-profile" className="text-dtoad-text">Show Profile</Label>
           <Switch
             id="show-profile"
             checked={settings.show_profile}
             onCheckedChange={() => handleToggle("show_profile")}
+            className="data-[state=checked]:bg-dtoad-primary"
           />
         </div>
         <div className="flex items-center justify-between">
-          <Label htmlFor="show-stats">Show Stats</Label>
+          <Label htmlFor="show-stats" className="text-dtoad-text">Show Stats</Label>
           <Switch
             id="show-stats"
             checked={settings.show_stats}
             onCheckedChange={() => handleToggle("show_stats")}
+            className="data-[state=checked]:bg-dtoad-primary"
           />
         </div>
         <div className="flex items-center justify-between">
-          <Label htmlFor="show-leaderboard">Show on Leaderboard</Label>
+          <Label htmlFor="show-leaderboard" className="text-dtoad-text">Show on Leaderboard</Label>
           <Switch
             id="show-leaderboard"
             checked={settings.show_leaderboard}
             onCheckedChange={() => handleToggle("show_leaderboard")}
+            className="data-[state=checked]:bg-dtoad-primary"
           />
         </div>
       </CardContent>
