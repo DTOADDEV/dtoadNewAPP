@@ -3,11 +3,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { UserHeader } from "@/components/profile/UserHeader";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
+import { MainLayout } from "@/components/layout/MainLayout";
+import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { MetricsCards } from "@/components/profile/MetricsCards";
 import { FavoriteProjects } from "@/components/profile/FavoriteProjects";
+import { NotificationSettings } from "@/components/settings/NotificationSettings";
 import { SettingsContent } from "@/components/profile/SettingsContent";
-import { ProfileContent } from "@/components/profile/ProfileContent";
 import { useProfileBio } from "@/hooks/useProfileBio";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -30,7 +34,6 @@ export default function Profile() {
   const { profile, isLoading, getProfile } = useProfile();
   const [isUploading, setIsUploading] = useState(false);
   const [session, setSession] = useState(null);
-  const { editedBio, isEditing, handleBioChange, handleSaveBio, toggleEdit } = useProfileBio(profile?.bio || "");
 
   useEffect(() => {
     checkUser();
@@ -110,70 +113,60 @@ export default function Profile() {
     }
   }
 
-  const handleInviteFriends = () => {
-    toast({
-      title: "Coming Soon",
-      description: "Invite friends feature will be available soon!",
-    });
-  };
-
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader className="w-8 h-8 animate-spin text-dtoad-primary" />
-      </div>
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader className="w-8 h-8 animate-spin text-dtoad-primary" />
+        </div>
+      </MainLayout>
     );
   }
 
   if (!profile) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-        <p className="text-lg text-gray-600">Profile not found</p>
-        <button 
-          onClick={() => navigate("/")}
-          className="text-dtoad-primary hover:underline"
-        >
-          Return to Home
-        </button>
-      </div>
+      <MainLayout>
+        <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+          <p className="text-lg text-gray-400">Profile not found</p>
+          <Link to="/">
+            <Button variant="outline">Return to Home</Button>
+          </Link>
+        </div>
+      </MainLayout>
     );
   }
 
   return (
     <ProfileProvider value={{ profile, getProfile }}>
-      <div className="container mx-auto px-4 pt-20 pb-8 min-h-screen bg-[#1E2E2A]">
-        <div className="max-w-6xl mx-auto space-y-6">
-          <p className="text-gray-400 mb-4">This is a demo of the profile functionality. Try exploring the different sections!</p>
-          
-          <Tabs defaultValue="profile" className="space-y-6">
-            <div className="sticky top-20 z-40">
-              <div className="bg-[#0A1614] rounded-full p-1 max-w-md mx-auto">
-                <TabsList className="w-full bg-transparent border-none">
-                  <TabsTrigger
-                    value="profile"
-                    className="flex-1 text-white data-[state=active]:bg-transparent"
-                  >
-                    Profile
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="settings"
-                    className="flex-1 text-white data-[state=active]:bg-transparent"
-                  >
-                    Settings
-                  </TabsTrigger>
-                </TabsList>
-              </div>
+      <MainLayout>
+        <div className="container max-w-4xl mx-auto space-y-8 pt-20 pb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <Link to="/">
+                <Button variant="outline" size="icon">
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+              </Link>
+              <h1 className="text-2xl font-bold text-white">Profile</h1>
             </div>
+          </div>
 
-            <TabsContent value="profile" className="space-y-6 animate-fade-in-up">
+          <Tabs defaultValue="profile" className="w-full">
+            <TabsList className="w-full bg-[#0A1614] rounded-full p-1">
+              <TabsTrigger value="profile" className="flex-1 text-white data-[state=active]:bg-transparent">
+                Profile
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="flex-1 text-white data-[state=active]:bg-transparent">
+                Settings
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="profile" className="mt-6 space-y-6 animate-fade-in-up">
               <div className="bg-[#1A2825] rounded-lg p-6">
-                <UserHeader
-                  username={profile.username}
-                  walletAddress={profile.wallet_address}
-                  avatarUrl={profile.avatar_url}
-                  isUploading={isUploading}
+                <ProfileHeader
+                  profile={profile}
                   onAvatarChange={uploadAvatar}
-                  onInviteFriends={handleInviteFriends}
+                  isUploading={isUploading}
                 />
               </div>
 
@@ -195,7 +188,7 @@ export default function Profile() {
             </TabsContent>
           </Tabs>
         </div>
-      </div>
+      </MainLayout>
     </ProfileProvider>
   );
 }
