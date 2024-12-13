@@ -75,7 +75,7 @@ export function TaskGrid({ tasks, isLoading }: TaskGridProps) {
       </div>
 
       <Dialog open={!!selectedCluster} onOpenChange={() => setSelectedCluster(null)}>
-        <DialogContent className="max-w-4xl h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl h-[80vh] overflow-y-auto bg-[#222222] border-[#2A2A2A]">
           {selectedCluster && (
             <TaskClusterContent cluster={selectedCluster} />
           )}
