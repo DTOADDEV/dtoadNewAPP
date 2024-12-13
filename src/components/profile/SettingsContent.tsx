@@ -60,58 +60,66 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
 
   const loadSettings = async () => {
     try {
+      console.log("Loading settings...");
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
+      if (!session?.user) {
+        console.log("No session found");
+        return;
+      }
 
-      // First try to get existing settings
+      console.log("Fetching settings for user:", session.user.id);
       let { data, error } = await supabase
         .from("user_settings")
         .select("*")
         .eq("id", session.user.id)
         .single();
 
-      // If no settings exist or there's an error, create default settings
-      if (!data || (error && error.code === "PGRST116")) {
-        const { data: newSettings, error: insertError } = await supabase
-          .from("user_settings")
-          .insert([
-            {
-              id: session.user.id,
-              theme_preference: defaultSettings.theme,
-              font_size: defaultSettings.fontSize,
-              email_notifications: defaultSettings.email_notifications,
-              push_notifications: defaultSettings.push_notifications,
-              privacy_settings: defaultSettings.privacy_settings,
-            }
-          ])
-          .select()
-          .single();
+      if (error) {
+        console.log("Error fetching settings:", error);
+        if (error.code === "PGRST116") {
+          console.log("No settings found, creating default settings");
+          const { data: newSettings, error: insertError } = await supabase
+            .from("user_settings")
+            .insert([
+              {
+                id: session.user.id,
+                theme_preference: defaultSettings.theme,
+                font_size: defaultSettings.fontSize,
+                email_notifications: defaultSettings.email_notifications,
+                push_notifications: defaultSettings.push_notifications,
+                privacy_settings: defaultSettings.privacy_settings,
+              }
+            ])
+            .select()
+            .single();
 
-        if (insertError) {
-          console.error("Error creating settings:", insertError);
-          throw insertError;
+          if (insertError) {
+            console.error("Error creating settings:", insertError);
+            throw insertError;
+          }
+          
+          console.log("Default settings created:", newSettings);
+          data = newSettings;
+        } else {
+          throw error;
         }
-        
-        data = newSettings;
-      } else if (error) {
-        console.error("Error fetching settings:", error);
-        throw error;
       }
 
       if (data) {
+        console.log("Settings loaded:", data);
         setSettings({
           theme: data.theme_preference,
           fontSize: data.font_size,
-          email_notifications: data.email_notifications as Settings['email_notifications'],
-          push_notifications: data.push_notifications as Settings['push_notifications'],
-          privacy_settings: data.privacy_settings as Settings['privacy_settings'],
+          email_notifications: data.email_notifications,
+          push_notifications: data.push_notifications,
+          privacy_settings: data.privacy_settings,
         });
       }
     } catch (error) {
-      console.error("Error loading settings:", error);
+      console.error("Error in loadSettings:", error);
       toast({
         title: "Error",
-        description: "Failed to load settings",
+        description: "Failed to load settings. Please try again.",
         variant: "destructive",
       });
     }
@@ -119,8 +127,12 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
 
   const updateSettings = async (newSettings: Partial<Settings>) => {
     try {
+      console.log("Updating settings:", newSettings);
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
+      if (!session?.user) {
+        console.log("No session found during update");
+        return;
+      }
 
       const { error } = await supabase
         .from("user_settings")
@@ -136,6 +148,7 @@ export function SettingsContent({ walletAddress, onConnectWallet }: SettingsCont
       if (error) throw error;
 
       setSettings((prev) => ({ ...prev, ...newSettings }));
+      console.log("Settings updated successfully");
       toast({
         title: "Success",
         description: "Settings updated successfully",
