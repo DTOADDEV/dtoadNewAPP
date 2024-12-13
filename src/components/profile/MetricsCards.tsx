@@ -18,27 +18,29 @@ export function MetricsCards({
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <MetricCard
         title="Tokens Held"
-        value={`${tokensHeld.toLocaleString()}`}
+        value={tokensHeld.toLocaleString()}
         subtitle="DTOAD"
-        icon={<Coins className="w-5 h-5 text-dtoad-primary" />}
+        icon={<Coins className="h-5 w-5 text-dtoad-accent" />}
+        progress={75}
       />
       <MetricCard
         title="Referrals"
-        value={`${referralsCount}`}
-        subtitle="Friends"
-        icon={<Users className="w-5 h-5 text-dtoad-primary" />}
+        value={`${referralsCount} Friends`}
+        icon={<Users className="h-5 w-5 text-dtoad-accent" />}
+        progress={60}
       />
       <MetricCard
         title="Tasks Completed"
-        value={`${tasksCompleted}`}
-        subtitle="Tasks"
-        icon={<Trophy className="w-5 h-5 text-dtoad-primary" />}
+        value={`${tasksCompleted} Tasks`}
+        icon={<Trophy className="h-5 w-5 text-dtoad-accent" />}
+        progress={80}
       />
       <MetricCard
         title="Leaderboard Rank"
         value={`#${leaderboardRank || "N/A"}`}
         subtitle="Top 10% of Users"
-        icon={<Award className="w-5 h-5 text-dtoad-accent" />}
+        icon={<Award className="h-5 w-5 text-dtoad-accent" />}
+        progress={90}
       />
     </div>
   );
@@ -49,24 +51,32 @@ interface MetricCardProps {
   value: string;
   subtitle?: string;
   icon: React.ReactNode;
+  progress: number;
 }
 
-function MetricCard({ title, value, subtitle, icon }: MetricCardProps) {
+function MetricCard({ title, value, subtitle, icon, progress }: MetricCardProps) {
   return (
-    <Card className="bg-[#1A2825] border-none">
+    <Card className="bg-[#1A2825] border-none overflow-hidden">
       <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-2">
-          <p className="text-sm font-medium text-gray-400">{title}</p>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-400">{title}</span>
           {icon}
         </div>
         <div className="space-y-1">
-          <p className="text-2xl font-bold text-white">{value}</p>
+          <div className="flex items-baseline space-x-2">
+            <h3 className="text-2xl font-bold text-white">{value}</h3>
+          </div>
           {subtitle && (
             <p className="text-sm text-gray-400">{subtitle}</p>
           )}
         </div>
-        <div className="mt-4 h-1 bg-dtoad-primary/20 rounded-full">
-          <div className="h-full w-3/4 bg-dtoad-primary rounded-full"></div>
+        <div className="mt-4">
+          <div className="h-1 w-full bg-dtoad-primary/10 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-dtoad-primary rounded-full transition-all duration-500 ease-in-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>
