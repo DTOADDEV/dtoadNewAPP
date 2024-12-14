@@ -92,19 +92,13 @@ export default {
             transform: "translateY(0)",
           },
         },
-        patrol: {
-          "0%": { transform: "translateY(0) rotate(0deg)" },
-          "50%": { transform: "translateY(-20px) rotate(10deg)" },
-          "100%": { transform: "translateY(0) rotate(-10deg)" },
-        },
-        "patrol-reverse": {
-          "0%": { transform: "translateY(0) rotate(0deg)" },
-          "50%": { transform: "translateY(20px) rotate(-10deg)" },
-          "100%": { transform: "translateY(0) rotate(10deg)" },
-        },
-        glow: {
-          "0%": { boxShadow: "0 0 5px #00ff00" },
-          "100%": { boxShadow: "0 0 20px #00ff00" },
+        "bounce-down": {
+          "0%, 100%": {
+            transform: "translateY(0)",
+          },
+          "50%": {
+            transform: "translateY(25%)",
+          },
         },
       },
       animation: {
@@ -112,10 +106,7 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-y": "gradient-y 15s ease infinite",
         "fade-in-up": "fade-in-up 0.5s ease-out forwards",
-        patrol: "patrol 10s infinite alternate ease-in-out",
-        "patrol-reverse": "patrol-reverse 10s infinite alternate ease-in-out",
-        glow: "glow 2s infinite alternate",
-        "glow-delay": "glow 2s infinite alternate 1s",
+        "bounce-down": "bounce-down 1s ease-in-out infinite",
       },
     },
   },
