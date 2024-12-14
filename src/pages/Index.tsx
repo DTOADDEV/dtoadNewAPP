@@ -1,9 +1,11 @@
 import { Hero } from "@/components/Hero";
+import { Roadmap } from "@/components/Roadmap";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dtoad-background via-dtoad-background-light to-dtoad-background-dark font-sans antialiased">
+    <div className="min-h-screen bg-[#0d0d0d] text-white font-sans antialiased">
       <Hero />
+      <Roadmap />
     </div>
   );
 };
