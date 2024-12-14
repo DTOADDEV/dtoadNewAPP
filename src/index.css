@@ -44,25 +44,77 @@
   }
 }
 
-/* Enhanced text rendering */
-.text-balance {
-  text-wrap: balance;
+/* Neon text effect */
+.neon-text {
+  text-shadow: 0 0 10px rgba(247, 115, 22, 0.5),
+               0 0 20px rgba(247, 115, 22, 0.3),
+               0 0 30px rgba(247, 115, 22, 0.2);
 }
 
-.text-enhanced {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+/* Glass text effect */
+.glass-text {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
 }
 
-/* Glass effect utilities */
-.glass-effect {
-  @apply backdrop-blur-md bg-white/10 border border-white/20;
+/* Neon button effects */
+.neon-button {
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5),
+              0 0 20px rgba(139, 92, 246, 0.3),
+              0 0 30px rgba(139, 92, 246, 0.2);
 }
 
-.glass-card {
-  @apply glass-effect rounded-2xl shadow-xl;
+.neon-button-outline {
+  box-shadow: 0 0 10px rgba(51, 195, 240, 0.5),
+              0 0 20px rgba(51, 195, 240, 0.3),
+              0 0 30px rgba(51, 195, 240, 0.2);
 }
 
-/* Gradient text effect */
-.gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r;
+/* Animation utilities */
+.animate-text-gradient {
+  background-size: 200% 200%;
+  animation: text-gradient 8s ease infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 3s ease-in-out infinite;
+}
+
+.animate-float-1 {
+  animation: float1 6s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float2 8s ease-in-out infinite;
+}
+
+@keyframes text-gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float1 {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(10deg);
+  }
+}
+
+@keyframes float2 {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(20px) rotate(-10deg);
+  }
 }

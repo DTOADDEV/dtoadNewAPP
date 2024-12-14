@@ -10,12 +10,10 @@ export const Hero = () => {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       console.log("Auth state changed in Hero:", session ? "logged in" : "logged out");
@@ -24,69 +22,83 @@ export const Hero = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleCreateTask = () => {
+  const handleBuyNow = () => {
     if (session) {
-      navigate("/create-task");
+      navigate("/dashboard");
     } else {
       navigate("/login");
     }
   };
 
-  const handleExploreTasks = () => {
+  const handleJoinCommunity = () => {
     navigate("/tasks");
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background with softer gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#B4BD8D] via-[#B4BD8D]/90 to-[#B4BD8D]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-dtoad-primary/15 via-transparent to-transparent" />
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#1A1F2C]">
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1A1F2C] via-[#221F26] to-[#1A1F2C] animate-gradient-y">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#8B5CF6]/10 via-transparent to-transparent" />
       </div>
-      
-      {/* Softer glowing orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-dtoad-primary/8 rounded-full filter blur-[128px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-dtoad-accent/8 rounded-full filter blur-[128px]" />
-      
-      {/* Content with adjusted colors for better contrast */}
-      <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 animate-fade-in-up max-w-5xl mx-auto">
-        <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-[#1A1F2C] drop-shadow-sm">
-          From{" "}
-          <span className="bg-gradient-to-r from-dtoad-primary/95 to-dtoad-accent/95 bg-clip-text text-transparent">
-            Memes
-          </span>{" "}
-          to{" "}
-          <span className="bg-gradient-to-r from-dtoad-accent/95 to-dtoad-primary/95 bg-clip-text text-transparent">
-            Dreams
-          </span>
+
+      {/* Glowing orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#0EA5E9]/20 rounded-full filter blur-[128px] animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#D946EF]/20 rounded-full filter blur-[128px] animate-pulse" />
+
+      {/* Main content */}
+      <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+        {/* Logo */}
+        <div className="mb-8">
+          <img
+            src="/lovable-uploads/0c625919-43a8-49cf-b251-be92ff858828.png"
+            alt="DToad Logo"
+            className="w-32 h-32 mx-auto animate-bounce-slow"
+          />
+        </div>
+
+        {/* Main heading with gradient text */}
+        <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#33C3F0] via-[#8B5CF6] to-[#D946EF] animate-text-gradient">
+          From Memes to Dreams
         </h1>
-        <h2 className="text-3xl sm:text-4xl font-medium text-[#222222]/90 mb-16 tracking-wide">
-          Join the DToad Revolution!
+
+        {/* Subheading with neon glow effect */}
+        <h2 className="text-2xl sm:text-3xl font-medium text-[#F97316] mb-12 tracking-wide animate-pulse-slow neon-text">
+          Hop into the Future - The Meme Coin Revolution!
         </h2>
-        <p className="text-xl sm:text-2xl text-[#333333]/90 mb-12 leading-relaxed font-light max-w-3xl mx-auto">
-          Earn Crypto, Build Community, Have Fun
+
+        {/* Description with futuristic styling */}
+        <p className="text-xl sm:text-2xl text-[#E2E8F0] mb-12 leading-relaxed font-light max-w-3xl mx-auto glass-text">
+          Join the most innovative meme coin in the crypto space. Powered by robotic toads and fueled by community dreams.
         </p>
+
+        {/* CTA buttons with neon effects */}
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
           <Button
             size="lg"
-            onClick={handleCreateTask}
-            className="bg-dtoad-primary/95 hover:bg-dtoad-primary text-white text-lg px-12 py-6 h-auto backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/30 transition-all duration-300 rounded-xl"
+            onClick={handleBuyNow}
+            className="neon-button bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-lg px-12 py-6 h-auto rounded-xl transform transition-all duration-300 hover:scale-105"
           >
-            Create Task
+            Buy $DTOAD Now
             <ArrowRight className="ml-2 h-6 w-6" />
           </Button>
           <Button
             size="lg"
             variant="outline"
-            onClick={handleExploreTasks}
-            className="border-2 border-dtoad-primary/30 text-[#222222] hover:bg-dtoad-primary/10 text-lg px-12 py-6 h-auto backdrop-blur-sm shadow-lg hover:shadow-dtoad-primary/30 transition-all duration-300 rounded-xl bg-white/40"
+            onClick={handleJoinCommunity}
+            className="neon-button-outline border-2 border-[#33C3F0] text-[#33C3F0] hover:bg-[#33C3F0]/10 text-lg px-12 py-6 h-auto rounded-xl transform transition-all duration-300 hover:scale-105"
           >
-            Explore Tasks
+            Join Toad Army
           </Button>
         </div>
-      </div>
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#B4BD8D] to-transparent" />
+        {/* Floating toad indicators */}
+        <div className="absolute top-20 right-20 animate-float-1">
+          <div className="w-16 h-16 bg-[#33C3F0]/20 rounded-full backdrop-blur-sm border border-[#33C3F0]/30" />
+        </div>
+        <div className="absolute bottom-20 left-20 animate-float-2">
+          <div className="w-12 h-12 bg-[#D946EF]/20 rounded-full backdrop-blur-sm border border-[#D946EF]/30" />
+        </div>
+      </div>
     </div>
   );
 };
