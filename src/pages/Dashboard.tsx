@@ -50,7 +50,7 @@ const leaderboardEntries = [
 
 export default function Dashboard() {
   return (
-    <div className="container mx-auto px-4 pt-24 pb-8">
+    <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-dtoad-text mb-2">
           Leaderboard – Celebrate the Best of DToad 🐸
