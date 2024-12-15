@@ -29,7 +29,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-[#e2e8f0];
   }
   body {
     @apply bg-background text-foreground antialiased;
@@ -65,4 +65,14 @@
 /* Gradient text effect */
 .gradient-text {
   @apply bg-clip-text text-transparent bg-gradient-to-r;
+}
+
+/* Landing page */
+.landing-page {
+  position: absolute;
+  top: -425px;
+  left: 401px;
+  width: 1880px;
+  height: 4227px;
+  background: linear-gradient(180deg, #9095A0FF 0%, #171A1FFF 100%);
 }
