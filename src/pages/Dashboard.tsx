@@ -84,15 +84,8 @@ export default function Dashboard() {
 
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-extrabold text-dtoad-text">Top Task Performers</h2>
-            <img 
-              src="/placeholder.svg" 
-              alt="DToad Mascot" 
-              className="w-12 h-12 object-cover rounded-full border-2 border-dtoad-primary animate-bounce"
-            />
-          </div>
-          <select className="bg-dtoad-secondary/20 border-none text-dtoad-text rounded-md p-2 font-semibold">
+          <h2 className="text-xl font-bold text-dtoad-text">Top Task Performers</h2>
+          <select className="bg-dtoad-secondary/20 border-none text-dtoad-text rounded-md p-2">
             <option value="all-time">All Time</option>
             <option value="weekly">Weekly</option>
             <option value="monthly">Monthly</option>
